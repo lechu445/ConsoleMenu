@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
+    <PackageId>ConsoleMenu-simple</PackageId>
+    <Authors>lechu445</Authors>
+    <Product>ConsoleMenu-simple</Product>
+    <Description>A simple, highly customizable, DOS-like console menu</Description>
+    <PackageReleaseNotes>- changed API to be compatible with .NET Standard 1.3
+- fix with submenu close</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/lechu445/ConsoleMenu</PackageProjectUrl>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
 </Project>
