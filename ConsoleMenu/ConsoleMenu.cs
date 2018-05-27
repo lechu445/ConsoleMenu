@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace ConsoleTools
 {
@@ -32,23 +34,48 @@ namespace ConsoleTools
     {
       ConsoleKeyInfo key;
       var menuItems = _menuItems.ToArray();
+      bool[] visibility = CreateVisibility();
       int curItem = 0;
       var currentForegroundColor = Console.ForegroundColor;
       var currentBackgroundColor = Console.BackgroundColor;
       bool breakIteration = false;
+      var filter = new StringBuilder();
+
       while (true)
       {
         do
         {
+          redraw:
           if (Config.ClearConsole)
           {
             Console.Clear();
           }
           Config.WriteHeaderAction();
 
-          for (int i = 0; i < menuItems.Length; i++)
+          int i = 0;
+          foreach (var menuItem in _menuItems)
           {
-            var itemName = menuItems[i].Item1;
+            if(Config.EnableFilter && !visibility[i])
+            {
+              i++;
+              var foundIdx = Array.IndexOf(visibility, true, curItem);
+              if (foundIdx == -1)
+              {
+                foundIdx = Array.LastIndexOf(visibility, true, curItem);
+                if(foundIdx != -1)
+                {
+                  curItem = foundIdx;
+                  goto redraw;
+                }
+              }
+              if (foundIdx == -1)
+              {
+                foundIdx = 0;
+              }
+              curItem = foundIdx;
+              continue;
+            }
+            var itemName = menuItem.Item1;
             if (curItem == i)
             {
               Console.BackgroundColor = Config.SelectedItemBackgroundColor;
@@ -67,11 +94,17 @@ namespace ConsoleTools
               Config.WriteItemAction(new MenuItem { Name = itemName, Index = i });
               Console.WriteLine();
             }
+            i++;
           }
 
           if (breakIteration)
           {
             break;
+          }
+
+          if(Config.EnableFilter)
+          {
+            Console.Write("Filter: " + filter);
           }
 
           readKey:
@@ -94,7 +127,29 @@ namespace ConsoleTools
           }
           else if (key.Key != ConsoleKey.Enter)
           {
-            goto readKey;
+            if (Config.EnableFilter)
+            {
+              if (key.Key == ConsoleKey.Backspace)
+              {
+                if (filter.Length > 0)
+                {
+                  filter.Length--;
+                }
+                Console.Write("\b \b");
+              }
+              else
+              {
+                filter.Append(key.KeyChar);
+                Console.Write(key.KeyChar);
+              }
+              {
+                UpdateVisibility(_menuItems, visibility, (item) => Contains(item.Item1, filter.ToString(), StringComparison.OrdinalIgnoreCase));
+              }
+            }
+            else
+            {
+              goto readKey;
+            }
           }
         } while (key.Key != ConsoleKey.Enter);
 
@@ -111,6 +166,29 @@ namespace ConsoleTools
         }
       }
     }
+
+    private bool[] CreateVisibility()
+    {
+      bool[] visibility = new bool[_menuItems.Count];
+      for (int i = 0; i < visibility.Length; i++)
+      {
+        visibility[i] = true;
+      }
+      return visibility;
+    }
+
+    private static void UpdateVisibility<T>(List<T> items, bool[] visibility, Predicate<T> matchFilter)
+    {
+      for (int i = 0; i < visibility.Length; i++)
+      {
+        visibility[i] = matchFilter(items[i]);
+      }
+    }
+
+    public static bool Contains(string source, string toCheck, StringComparison comp)
+    {
+      return source?.IndexOf(toCheck, comp) >= 0;
+    }
   }
 
   public class MenuConfig
@@ -123,6 +201,7 @@ namespace ConsoleTools
     public Action<MenuItem> WriteItemAction = item => Console.Write("[{0}] {1}", item.Index, item.Name);
     public string Selector = ">> ";
     public bool ClearConsole = true;
+    public bool EnableFilter = true;
   }
 
   public struct MenuItem { public string Name; public int Index; };

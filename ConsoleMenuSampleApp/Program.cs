@@ -22,7 +22,7 @@ namespace ConsoleMenuSampleApp
         .Add("Four", subMenu.Show)
         .Add("Close", ConsoleMenu.Close)
         .Add("Exit", () => Environment.Exit(0))
-        .Configure(config => { config.Selector = "--> "; });
+        .Configure(config => { config.Selector = "--> "; config.EnableFilter = true; });
 
       menu.Show();
     }
