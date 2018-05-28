@@ -36,7 +36,9 @@ You can also define configuration via .Configure() method. The default config lo
     public Action WriteHeaderAction = () => Console.WriteLine("Pick an option:");
     public Action<MenuItem> WriteItemAction = item => Console.Write("[{0}] {1}", item.Index, item.Name);
     public string Selector = ">> ";
+    public string FilterPrompt = "Filter: ";
     public bool ClearConsole = true;
+    public bool EnableFilter = true;
   }
 ```
 Example:
