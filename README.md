@@ -38,7 +38,7 @@ You can also define configuration via .Configure() method. The default config lo
     public string Selector = ">> ";
     public string FilterPrompt = "Filter: ";
     public bool ClearConsole = true;
-    public bool EnableFilter = true;
+    public bool EnableFilter = false;
   }
 ```
 Example:
