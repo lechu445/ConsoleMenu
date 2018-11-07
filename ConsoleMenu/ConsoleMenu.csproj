@@ -6,14 +6,13 @@
     <Authors>lechu445</Authors>
     <Product>ConsoleMenu-simple</Product>
     <Description>A simple, highly customizable, DOS-like console menu</Description>
-    <PackageReleaseNotes>- add option to enable filter
-Using filter is simple: just type name of menu item so menu will display ony these items that name contain provided text</PackageReleaseNotes>
+    <PackageReleaseNotes>- fixed bug that stucks in a loop if numbers keys were used</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/lechu445/ConsoleMenu</PackageProjectUrl>
-    <AssemblyVersion>2.1.1.0</AssemblyVersion>
-    <Version>2.1.1</Version>
+    <AssemblyVersion>2.1.2.0</AssemblyVersion>
+    <Version>2.1.2</Version>
     <RepositoryUrl></RepositoryUrl>
     <PackageTags>console, menu, simple</PackageTags>
-    <FileVersion>2.1.1.0</FileVersion>
+    <FileVersion>2.1.2.0</FileVersion>
   </PropertyGroup>
 
 </Project>

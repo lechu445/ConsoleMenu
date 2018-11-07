@@ -3,9 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleMenu", "ConsoleMenu\ConsoleMenu.csproj", "{A1653921-DC17-48FD-9C74-F62A0B23E742}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleMenu", "ConsoleMenu\ConsoleMenu.csproj", "{A1653921-DC17-48FD-9C74-F62A0B23E742}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleMenuSampleApp", "ConsoleMenuSampleApp\ConsoleMenuSampleApp.csproj", "{6F5E57C6-45FE-4946-95FF-5B3259E08EB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleMenuSampleApp", "ConsoleMenuSampleApp\ConsoleMenuSampleApp.csproj", "{6F5E57C6-45FE-4946-95FF-5B3259E08EB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A114A1AF-445A-4014-B664-52FA8DFC5B9D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		preview.gif = preview.gif
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

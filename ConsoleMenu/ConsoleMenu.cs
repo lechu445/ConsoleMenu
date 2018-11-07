@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace ConsoleTools
@@ -28,6 +27,9 @@ namespace ConsoleTools
       return this;
     }
 
+    /// <summary>
+    /// Don't run this method directly. Just pass a reference to this method.
+    /// </summary>
     public static void Close() => throw new InvalidOperationException("Don't run this method directly. Just pass a reference to this method.");
 
     public void Show()
@@ -54,7 +56,7 @@ namespace ConsoleTools
           int i = 0;
           foreach (var menuItem in _menuItems)
           {
-            if(_config.EnableFilter && !visibility[i])
+            if (_config.EnableFilter && !visibility[i])
             {
               curItem = SetAnotherCurItem(visibility, curItem, out var shouldRedraw);
               if (shouldRedraw)
@@ -88,10 +90,11 @@ namespace ConsoleTools
 
           if (breakIteration)
           {
+            breakIteration = false;
             break;
           }
 
-          if(_config.EnableFilter)
+          if (_config.EnableFilter)
           {
             Console.Write(_config.FilterPrompt + filter);
           }
@@ -159,7 +162,7 @@ namespace ConsoleTools
     {
       shouldRedraw = false;
       var foundIdx = Array.IndexOf(visibility, true, curItem);
-      if(foundIdx != -1)
+      if (foundIdx != -1)
       {
         return foundIdx;
       }
@@ -198,15 +201,34 @@ namespace ConsoleTools
 
   public class MenuConfig
   {
+    /// <summary>default: Console.ForegroundColor</summary>
     public ConsoleColor SelectedItemBackgroundColor = Console.ForegroundColor;
+
+    /// <summary>default: Console.BackgroundColor</summary>
     public ConsoleColor SelectedItemForegroundColor = Console.BackgroundColor;
+
+    /// <summary>default: Console.BackgroundColor</summary>
     public ConsoleColor ItemBackgroundColor = Console.BackgroundColor;
+
+    /// <summary>default: Console.ForegroundColor</summary>
     public ConsoleColor ItemForegroundColor = Console.ForegroundColor;
+
+    /// <summary>default: () => Console.WriteLine("Pick an option:")</summary>
     public Action WriteHeaderAction = () => Console.WriteLine("Pick an option:");
+
+    /// <summary>default: (item) => Console.Write("[{0}] {1}", item.Index, item.Name)</summary>
     public Action<MenuItem> WriteItemAction = item => Console.Write("[{0}] {1}", item.Index, item.Name);
+
+    /// <summary>default: ">> "</summary>
     public string Selector = ">> ";
+
+    /// <summary>default: "Filter: "</summary>
     public string FilterPrompt = "Filter: ";
+
+    /// <summary>default: true</summary>
     public bool ClearConsole = true;
+
+    /// <summary>default: true</summary>
     public bool EnableFilter = false;
   }
 
