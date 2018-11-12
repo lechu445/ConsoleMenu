@@ -19,7 +19,7 @@ Nuget package: https://www.nuget.org/packages/ConsoleMenu-simple
         .Add("One", () => SomeAction("One"))
         .Add("Two", () => SomeAction("Two"))
         .Add("Three", () => SomeAction("Three"))
-        .Add("Four", subMenu.Show)
+        .Add("Sub", subMenu.Show)
         .Add("Close", ConsoleMenu.Close)
         .Add("Exit", () => Environment.Exit(0))
         .Configure(config => { config.Selector = "--> "; });

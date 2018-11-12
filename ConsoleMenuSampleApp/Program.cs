@@ -13,13 +13,14 @@ namespace ConsoleMenuSampleApp
         .Add("Sub_Three", () => SomeAction("Sub_Three"))
         .Add("Sub_Four", () => SomeAction("Sub_Four"))
         .Add("Sub_Close", ConsoleMenu.Close)
-        .Add("Sub_Exit", () => Environment.Exit(0));
+        .Add("Sub_Exit", () => Environment.Exit(0))
+        .Configure(config => { config.Selector = "--> "; config.EnableFilter = true; });
 
       var menu = new ConsoleMenu()
         .Add("One", () => SomeAction("One"))
         .Add("Two", () => SomeAction("Two"))
         .Add("Three", () => SomeAction("Three"))
-        .Add("Four", subMenu.Show)
+        .Add("Sub", subMenu.Show)
         .Add("Close", ConsoleMenu.Close)
         .Add("Exit", () => Environment.Exit(0))
         .Configure(config => { config.Selector = "--> "; config.EnableFilter = true; });

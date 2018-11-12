@@ -35,7 +35,7 @@ namespace ConsoleTools
     public void Show()
     {
       ConsoleKeyInfo key;
-      bool[] visibility = CreateVisibility();
+      bool[] visibility = CreateVisibility(); //true is visible
       int curItem = 0;
       var currentForegroundColor = Console.ForegroundColor;
       var currentBackgroundColor = Console.BackgroundColor;
@@ -104,13 +104,11 @@ namespace ConsoleTools
 
           if (key.Key == ConsoleKey.DownArrow)
           {
-            curItem++;
-            if (curItem > _menuItems.Count - 1) curItem = 0;
+            curItem = IndexOfNextVisibleItem(curItem, visibility);
           }
           else if (key.Key == ConsoleKey.UpArrow)
           {
-            curItem--;
-            if (curItem < 0) curItem = _menuItems.Count - 1;
+            curItem = IndexOfPreviousVisibleItem(curItem, visibility);
           }
           else if (key.KeyChar >= '0' && (key.KeyChar - '0') < _menuItems.Count)
           {
@@ -129,7 +127,7 @@ namespace ConsoleTools
                 }
                 Console.Write("\b \b");
               }
-              else
+              else if(!char.IsControl(key.KeyChar))
               {
                 filter.Append(key.KeyChar);
                 Console.Write(key.KeyChar);
@@ -156,6 +154,42 @@ namespace ConsoleTools
           action?.Invoke();
         }
       }
+    }
+
+    private int IndexOfNextVisibleItem(int curItem, bool[] visibility)
+    {
+      int idx = -1;
+      if(curItem + 1 < visibility.Length)
+      {
+        idx = Array.IndexOf(visibility, value: true, startIndex: curItem + 1);
+      }
+      if (idx == -1)
+      {
+        idx = Array.IndexOf(visibility, value: true, startIndex: 0);
+      }
+      if(idx == -1)
+      {
+        idx = curItem;
+      }
+      return idx;
+    }
+
+    private int IndexOfPreviousVisibleItem(int curItem, bool[] visibility)
+    {
+      int idx = -1;
+      if(curItem - 1 >= 0)
+      {
+        idx = Array.LastIndexOf(visibility, value: true, startIndex: curItem - 1);
+      }
+      if (idx == -1)
+      {
+        idx = Array.LastIndexOf(visibility, value: true, startIndex: visibility.Length - 1);
+      }
+      if (idx == -1)
+      {
+        idx = curItem;
+      }
+      return idx;
     }
 
     private static int SetAnotherCurItem(bool[] visibility, int curItem, out bool shouldRedraw)
