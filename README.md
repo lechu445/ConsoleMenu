@@ -31,10 +31,10 @@ Nuget package: https://www.nuget.org/packages/ConsoleMenu-simple
 To do this, use `public ConsoleMenu(string[] args, int level)` constructor during initialization.
 Use double quotes for item names and digits for item numbers. Here are some examples:
 ```csharp
-dotnet run --menu-select=0.1                        //run first at level 0 and second at level 1
-dotnet run --menu-select="Sub"."Sub_One"."Close..." //run "Sub" at level 0 and "Sub_One" at level 1, and "Close..." at level 2
-dotnet run --menu-select=Sub.Sub_One."Close..."     //run "Sub" at level 0 and "Sub_One" at level 1, and "Close..." at level 2
-dotnet run --menu-select="Sub".2                    //run item "Sub" at level 0, and then run third item at level 1
+--menu-select=0.1                        //run first at level 0 and second at level 1
+--menu-select="Sub"."Sub_One"."Close..." //run "Sub" at level 0 and "Sub_One" at level 1, and "Close..." at level 2
+--menu-select=Sub.Sub_One."Close..."     //run "Sub" at level 0 and "Sub_One" at level 1, and "Close..." at level 2
+--menu-select="Sub".2                    //run item "Sub" at level 0, and then run third item at level 1
 ```
 
 ### Configuration
@@ -52,6 +52,8 @@ You can also define configuration via .Configure() method. The default config lo
     public string FilterPrompt = "Filter: ";
     public bool ClearConsole = true;
     public bool EnableFilter = false;
+    public string ArgsPreselectedItemsKey = "--menu-select=";
+    public char ArgsPreselectedItemsValueSeparator = '.';
   }
 ```
 Example:

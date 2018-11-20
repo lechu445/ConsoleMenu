@@ -11,10 +11,13 @@ namespace ConsoleTools
     private int? _selectedIndex;
     private string _selectedName;
 
+    /// <summary>
+    /// Creates ConsoleMenu instance
+    /// </summary>
     public ConsoleMenu() { }
 
     /// <summary>
-    /// Allows run ConsoleMenu with pre-selected items, e.g. --menu-select=1.3.2
+    /// Creates ConsoleMenu instance with possibility to pre-select items via console parameter
     /// </summary>
     /// <param name="args">args collection from Main</param>
     /// <param name="level">Level of whole menu</param>
@@ -43,7 +46,7 @@ namespace ConsoleTools
       {
         return;
       }
-      arg = arg.Replace(paramKey, string.Empty);
+      arg = arg.Replace(paramKey, string.Empty).Trim();
       var items = arg.SplitItems(_config.ArgsPreselectedItemsValueSeparator, '"');
       if (level <= items.Count)
       {
@@ -88,7 +91,7 @@ namespace ConsoleTools
         return;
       }
       ConsoleKeyInfo key;
-      bool[] visibility = CreateVisibility(); //true is visible
+      bool[] visibility = CreateVisibility(); //true means visible
       int curItem = 0;
       var currentForegroundColor = Console.ForegroundColor;
       var currentBackgroundColor = Console.BackgroundColor;
@@ -185,7 +188,8 @@ namespace ConsoleTools
                 filter.Append(key.KeyChar);
                 Console.Write(key.KeyChar);
               }
-              UpdateVisibility(_menuItems, visibility, (item) => Contains(item.Item1, filter.ToString(), StringComparison.OrdinalIgnoreCase));
+              UpdateVisibility(_menuItems, visibility,
+                (item) => Contains(item.Item1, filter.ToString(), StringComparison.OrdinalIgnoreCase));
             }
             else
             {
@@ -297,45 +301,6 @@ namespace ConsoleTools
     {
       return source?.IndexOf(toCheck, comp) >= 0;
     }
-  }
-
-  public class MenuConfig
-  {
-    /// <summary>default: Console.ForegroundColor</summary>
-    public ConsoleColor SelectedItemBackgroundColor = Console.ForegroundColor;
-
-    /// <summary>default: Console.BackgroundColor</summary>
-    public ConsoleColor SelectedItemForegroundColor = Console.BackgroundColor;
-
-    /// <summary>default: Console.BackgroundColor</summary>
-    public ConsoleColor ItemBackgroundColor = Console.BackgroundColor;
-
-    /// <summary>default: Console.ForegroundColor</summary>
-    public ConsoleColor ItemForegroundColor = Console.ForegroundColor;
-
-    /// <summary>default: () => Console.WriteLine("Pick an option:")</summary>
-    public Action WriteHeaderAction = () => Console.WriteLine("Pick an option:");
-
-    /// <summary>default: (item) => Console.Write("[{0}] {1}", item.Index, item.Name)</summary>
-    public Action<MenuItem> WriteItemAction = item => Console.Write("[{0}] {1}", item.Index, item.Name);
-
-    /// <summary>default: ">> "</summary>
-    public string Selector = ">> ";
-
-    /// <summary>default: "Filter: "</summary>
-    public string FilterPrompt = "Filter: ";
-
-    /// <summary>default: true</summary>
-    public bool ClearConsole = true;
-
-    /// <summary>default: true</summary>
-    public bool EnableFilter = false;
-
-    /// <summary>Console parameter that runs menu with pre-selection. default: "--menu-select="</summary>
-    public string ArgsPreselectedItemsKey = "--menu-select=";
-
-    /// <summary>default: '.'</summary>
-    public char ArgsPreselectedItemsValueSeparator = '.';
   }
 
   public struct MenuItem { public string Name; public int Index; };
