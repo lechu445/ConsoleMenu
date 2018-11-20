@@ -7,7 +7,7 @@ namespace ConsoleMenuSampleApp
   {
     static void Main(string[] args)
     {
-      var subMenu = new ConsoleMenu()
+      var subMenu = new ConsoleMenu(args, level: 1)
         .Add("Sub_One", () => SomeAction("Sub_One"))
         .Add("Sub_Two", () => SomeAction("Sub_Two"))
         .Add("Sub_Three", () => SomeAction("Sub_Three"))
@@ -16,7 +16,7 @@ namespace ConsoleMenuSampleApp
         .Add("Sub_Exit", () => Environment.Exit(0))
         .Configure(config => { config.Selector = "--> "; config.EnableFilter = true; });
 
-      var menu = new ConsoleMenu()
+      var menu = new ConsoleMenu(args, level: 0)
         .Add("One", () => SomeAction("One"))
         .Add("Two", () => SomeAction("Two"))
         .Add("Three", () => SomeAction("Three"))

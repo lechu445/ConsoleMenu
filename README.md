@@ -7,7 +7,7 @@ Nuget package: https://www.nuget.org/packages/ConsoleMenu-simple
 
 ## Usage
 ```csharp
-      var subMenu = new ConsoleMenu()
+      var subMenu = new ConsoleMenu(args, level: 1)
         .Add("Sub_One", () => SomeAction("Sub_One"))
         .Add("Sub_Two", () => SomeAction("Sub_Two"))
         .Add("Sub_Three", () => SomeAction("Sub_Three"))
@@ -15,7 +15,7 @@ Nuget package: https://www.nuget.org/packages/ConsoleMenu-simple
         .Add("Sub_Close", ConsoleMenu.Close)
         .Add("Sub_Exit", () => Environment.Exit(0));
         
-      var menu = new ConsoleMenu()
+      var menu = new ConsoleMenu(args, level: 0)
         .Add("One", () => SomeAction("One"))
         .Add("Two", () => SomeAction("Two"))
         .Add("Three", () => SomeAction("Three"))
@@ -26,6 +26,17 @@ Nuget package: https://www.nuget.org/packages/ConsoleMenu-simple
 
       menu.Show();
 ```
+
+### Running app from console with pre-selected menu items 
+To do this, use `public ConsoleMenu(string[] args, int level)` constructor during initialization.
+Use double quotes for item names and digits for item numbers. Here are some examples:
+```csharp
+dotnet run --menu-select=0.1                        //run first at level 0 and second at level 1
+dotnet run --menu-select="Sub"."Sub_One"."Close..." //run "Sub" at level 0 and "Sub_One" at level 1, and "Close..." at level 2
+dotnet run --menu-select=Sub.Sub_One."Close..."     //run "Sub" at level 0 and "Sub_One" at level 1, and "Close..." at level 2
+dotnet run --menu-select="Sub".2                    //run item "Sub" at level 0, and then run third item at level 1
+```
+
 ### Configuration
 You can also define configuration via .Configure() method. The default config looks like:
 ```csharp

@@ -6,13 +6,13 @@
     <Authors>lechu445</Authors>
     <Product>ConsoleMenu-simple</Product>
     <Description>A simple, highly customizable, DOS-like console menu</Description>
-    <PackageReleaseNotes>- fixed bugs with navigation when using control keys</PackageReleaseNotes>
+    <PackageReleaseNotes>- add possibility to run application with pre-selected menu (see README.md)</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/lechu445/ConsoleMenu</PackageProjectUrl>
-    <AssemblyVersion>2.1.3.0</AssemblyVersion>
-    <Version>2.1.3</Version>
+    <AssemblyVersion>2.2.0.0</AssemblyVersion>
+    <Version>2.2.0</Version>
     <RepositoryUrl></RepositoryUrl>
     <PackageTags>console, menu, simple</PackageTags>
-    <FileVersion>2.1.3.0</FileVersion>
+    <FileVersion>2.2.0.0</FileVersion>
   </PropertyGroup>
 
 </Project>

@@ -8,6 +8,53 @@ namespace ConsoleTools
   {
     private readonly MenuConfig _config = new MenuConfig();
     private readonly List<Tuple<string, Action>> _menuItems = new List<Tuple<string, Action>>();
+    private int? _selectedIndex;
+    private string _selectedName;
+
+    public ConsoleMenu() { }
+
+    /// <summary>
+    /// Allows run ConsoleMenu with pre-selected items, e.g. --menu-select=1.3.2
+    /// </summary>
+    /// <param name="args">args collection from Main</param>
+    /// <param name="level">Level of whole menu</param>
+    public ConsoleMenu(string[] args, int level)
+    {
+      if(level < 0)
+      {
+        throw new ArgumentException("Cannot be below 0", nameof(level));
+      }
+      if(args == null)
+      {
+        throw new ArgumentNullException(nameof(args));
+      }
+      SetSeletedItems(args, level);
+    }
+
+    private void SetSeletedItems(string[] args, int level)
+    {
+      var arg = Array.Find(args, a => a.StartsWith(_config.ArgsPreselectedItemsKey));
+      SetSelectedItems(level, _config.ArgsPreselectedItemsKey, ref arg);
+    }
+
+    private void SetSelectedItems(int level, string paramKey, ref string arg)
+    {
+      if (arg == null)
+      {
+        return;
+      }
+      arg = arg.Replace(paramKey, string.Empty);
+      var items = arg.SplitItems(_config.ArgsPreselectedItemsValueSeparator, '"');
+      if (level <= items.Count)
+      {
+        if (int.TryParse(items[level], out var selectedIndex))
+        {
+          _selectedIndex = selectedIndex;
+          return;
+        }
+        _selectedName = items[level];
+      }
+    }
 
     public ConsoleMenu Add(string name, Action action)
     {
@@ -34,6 +81,12 @@ namespace ConsoleTools
 
     public void Show()
     {
+      var selectedItem = GetSeletedItem();
+      if(selectedItem != null)
+      {
+        selectedItem.Item2.Invoke();
+        return;
+      }
       ConsoleKeyInfo key;
       bool[] visibility = CreateVisibility(); //true is visible
       int curItem = 0;
@@ -156,6 +209,19 @@ namespace ConsoleTools
       }
     }
 
+    private Tuple<string, Action> GetSeletedItem()
+    {
+      if(_selectedIndex.HasValue && _selectedIndex.Value < _menuItems.Count)
+      {
+        return _menuItems[_selectedIndex.Value];
+      }
+      if(_selectedName != null)
+      {
+        return _menuItems.Find(item => item.Item1 == _selectedName);
+      }
+      return null;
+    }
+
     private int IndexOfNextVisibleItem(int curItem, bool[] visibility)
     {
       int idx = -1;
@@ -264,6 +330,12 @@ namespace ConsoleTools
 
     /// <summary>default: true</summary>
     public bool EnableFilter = false;
+
+    /// <summary>Console parameter that runs menu with pre-selection. default: "--menu-select="</summary>
+    public string ArgsPreselectedItemsKey = "--menu-select=";
+
+    /// <summary>default: '.'</summary>
+    public char ArgsPreselectedItemsValueSeparator = '.';
   }
 
   public struct MenuItem { public string Name; public int Index; };
