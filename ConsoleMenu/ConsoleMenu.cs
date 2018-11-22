@@ -47,15 +47,16 @@ namespace ConsoleTools
         return;
       }
       arg = arg.Replace(paramKey, string.Empty).Trim();
-      var items = arg.SplitItems(_config.ArgsPreselectedItemsValueSeparator, '"');
+      var items = arg.SplitItems(_config.ArgsPreselectedItemsValueSeparator, '\'');
       if (level <= items.Count)
       {
-        if (int.TryParse(items[level], out var selectedIndex))
+        var item = items[level].Trim('\'');
+        if (int.TryParse(item, out var selectedIndex))
         {
           _selectedIndex = selectedIndex;
           return;
         }
-        _selectedName = items[level];
+        _selectedName = item;
       }
     }
 
@@ -181,12 +182,10 @@ namespace ConsoleTools
                 {
                   filter.Length--;
                 }
-                Console.Write("\b \b");
               }
               else if(!char.IsControl(key.KeyChar))
               {
                 filter.Append(key.KeyChar);
-                Console.Write(key.KeyChar);
               }
               UpdateVisibility(_menuItems, visibility,
                 (item) => Contains(item.Item1, filter.ToString(), StringComparison.OrdinalIgnoreCase));
