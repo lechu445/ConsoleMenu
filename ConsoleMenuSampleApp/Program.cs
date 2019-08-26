@@ -21,7 +21,9 @@ namespace ConsoleMenuSampleApp
         .Add("Two", () => SomeAction("Two"))
         .Add("Three", () => SomeAction("Three"))
         .Add("Sub", subMenu.Show)
+        .Add("Change me!", (thisMenu) => thisMenu.CurrentItem.Name = "I am changed!")
         .Add("Close", ConsoleMenu.Close)
+        .Add("Action then Close", (thisMenu) => { SomeAction("Closing action..."); thisMenu.CloseMenu(); })
         .Add("Exit", () => Environment.Exit(0))
         .Configure(config => { config.Selector = "--> "; config.EnableFilter = true; });
 

@@ -1,15 +1,34 @@
-﻿using System;
+﻿using System.Runtime.CompilerServices;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
+[assembly: InternalsVisibleTo("ConsoleMenuTests")]
 namespace ConsoleTools
 {
   public class ConsoleMenu
   {
     private readonly MenuConfig _config = new MenuConfig();
-    private readonly List<Tuple<string, Action>> _menuItems = new List<Tuple<string, Action>>();
+    private readonly List<MenuItem> _menuItems = new List<MenuItem>();
     private int? _selectedIndex;
     private string _selectedName;
+    private bool close;
+    private int currentItemIndex;
+    internal IConsole console = new SystemConsole();
+
+    /// <summary>
+    /// Menu items that can be modified
+    /// </summary>
+    public IReadOnlyList<MenuItem> Items => _menuItems;
+
+    /// <summary>
+    /// Selected menu item that can be modified
+    /// </summary>
+    public MenuItem CurrentItem
+    {
+      get => _menuItems[currentItemIndex];
+      set => _menuItems[currentItemIndex] = value;
+    }
 
     /// <summary>
     /// Creates ConsoleMenu instance
@@ -32,6 +51,14 @@ namespace ConsoleTools
         throw new ArgumentNullException(nameof(args));
       }
       SetSeletedItems(args, level);
+    }
+
+    /// <summary>
+    /// Close the menu before or after a menu action was triggered
+    /// </summary>
+    public void CloseMenu()
+    {
+      this.close = true;
     }
 
     private void SetSeletedItems(string[] args, int level)
@@ -62,13 +89,22 @@ namespace ConsoleTools
 
     public ConsoleMenu Add(string name, Action action)
     {
-      _menuItems.Add(new Tuple<string, Action>(name, action));
+      _menuItems.Add(new MenuItem(name, action, index: _menuItems.Count));
+      return this;
+    }
+
+    public ConsoleMenu Add(string name, Action<ConsoleMenu> action)
+    {
+      _menuItems.Add(new MenuItem(name, () => action(this), index: _menuItems.Count));
       return this;
     }
 
     public ConsoleMenu AddRange(IEnumerable<Tuple<string, Action>> menuItems)
     {
-      _menuItems.AddRange(menuItems);
+      foreach (var item in menuItems)
+      {
+        Add(item.Item1, item.Item2);
+      }
       return this;
     }
 
@@ -88,14 +124,14 @@ namespace ConsoleTools
       var selectedItem = GetSeletedItem();
       if(selectedItem != null)
       {
-        selectedItem.Item2.Invoke();
+        selectedItem.Action.Invoke();
         return;
       }
       ConsoleKeyInfo key;
       bool[] visibility = CreateVisibility(); //true means visible
-      int curItem = 0;
-      var currentForegroundColor = Console.ForegroundColor;
-      var currentBackgroundColor = Console.BackgroundColor;
+      this.currentItemIndex = 0;
+      var currentForegroundColor = this.console.ForegroundColor;
+      var currentBackgroundColor = this.console.BackgroundColor;
       bool breakIteration = false;
       var filter = new StringBuilder();
 
@@ -106,7 +142,7 @@ namespace ConsoleTools
           redraw:
           if (_config.ClearConsole)
           {
-            Console.Clear();
+            this.console.Clear();
           }
           _config.WriteHeaderAction();
 
@@ -115,7 +151,7 @@ namespace ConsoleTools
           {
             if (_config.EnableFilter && !visibility[i])
             {
-              curItem = SetAnotherCurItem(visibility, curItem, out var shouldRedraw);
+              currentItemIndex = SetAnotherCurItem(visibility, currentItemIndex, out var shouldRedraw);
               if (shouldRedraw)
               {
                 goto redraw;
@@ -123,24 +159,23 @@ namespace ConsoleTools
               i++;
               continue;
             }
-            var itemName = menuItem.Item1;
-            if (curItem == i)
+            if (currentItemIndex == i)
             {
-              Console.BackgroundColor = _config.SelectedItemBackgroundColor;
-              Console.ForegroundColor = _config.SelectedItemForegroundColor;
-              Console.Write(_config.Selector);
-              _config.WriteItemAction(new MenuItem { Name = itemName, Index = i });
-              Console.WriteLine();
-              Console.BackgroundColor = _config.ItemBackgroundColor;
-              Console.ForegroundColor = _config.ItemForegroundColor;
+              this.console.BackgroundColor = _config.SelectedItemBackgroundColor;
+              this.console.ForegroundColor = _config.SelectedItemForegroundColor;
+              this.console.Write(_config.Selector);
+              _config.WriteItemAction(menuItem);
+              this.console.WriteLine();
+              this.console.BackgroundColor = _config.ItemBackgroundColor;
+              this.console.ForegroundColor = _config.ItemForegroundColor;
             }
             else
             {
-              Console.BackgroundColor = _config.ItemBackgroundColor;
-              Console.ForegroundColor = _config.ItemForegroundColor;
-              Console.Write(new string(' ', _config.Selector.Length));
-              _config.WriteItemAction(new MenuItem { Name = itemName, Index = i });
-              Console.WriteLine();
+              this.console.BackgroundColor = _config.ItemBackgroundColor;
+              this.console.ForegroundColor = _config.ItemForegroundColor;
+              this.console.Write(new string(' ', _config.Selector.Length));
+              _config.WriteItemAction(menuItem);
+              this.console.WriteLine();
             }
             i++;
           }
@@ -153,23 +188,23 @@ namespace ConsoleTools
 
           if (_config.EnableFilter)
           {
-            Console.Write(_config.FilterPrompt + filter);
+            this.console.Write(_config.FilterPrompt + filter);
           }
 
           readKey:
-          key = Console.ReadKey(true);
+          key = this.console.ReadKey(true);
 
           if (key.Key == ConsoleKey.DownArrow)
           {
-            curItem = IndexOfNextVisibleItem(curItem, visibility);
+            currentItemIndex = IndexOfNextVisibleItem(currentItemIndex, visibility);
           }
           else if (key.Key == ConsoleKey.UpArrow)
           {
-            curItem = IndexOfPreviousVisibleItem(curItem, visibility);
+            currentItemIndex = IndexOfPreviousVisibleItem(currentItemIndex, visibility);
           }
           else if (key.KeyChar >= '0' && (key.KeyChar - '0') < _menuItems.Count)
           {
-            curItem = key.KeyChar - '0';
+            currentItemIndex = key.KeyChar - '0';
             breakIteration = true;
           }
           else if (key.Key != ConsoleKey.Enter)
@@ -188,7 +223,7 @@ namespace ConsoleTools
                 filter.Append(key.KeyChar);
               }
               UpdateVisibility(_menuItems, visibility,
-                (item) => Contains(item.Item1, filter.ToString(), StringComparison.OrdinalIgnoreCase));
+                (item) => Contains(item.Name, filter.ToString(), StringComparison.OrdinalIgnoreCase));
             }
             else
             {
@@ -197,10 +232,10 @@ namespace ConsoleTools
           }
         } while (key.Key != ConsoleKey.Enter);
 
-        Console.WriteLine();
-        Console.ForegroundColor = currentForegroundColor;
-        Console.BackgroundColor = currentBackgroundColor;
-        var action = _menuItems[curItem].Item2;
+        this.console.WriteLine();
+        this.console.ForegroundColor = currentForegroundColor;
+        this.console.BackgroundColor = currentBackgroundColor;
+        var action = _menuItems[currentItemIndex].Action;
         if (action == Close)
         {
           return;
@@ -208,11 +243,16 @@ namespace ConsoleTools
         else
         {
           action?.Invoke();
+          if (this.close)
+          {
+            this.close = false;
+            return;
+          }
         }
       }
     }
 
-    private Tuple<string, Action> GetSeletedItem()
+    private MenuItem GetSeletedItem()
     {
       if(_selectedIndex.HasValue && _selectedIndex.Value < _menuItems.Count)
       {
@@ -220,7 +260,7 @@ namespace ConsoleTools
       }
       if(_selectedName != null)
       {
-        return _menuItems.Find(item => item.Item1 == _selectedName);
+        return _menuItems.Find(item => item.Name == _selectedName);
       }
       return null;
     }
@@ -301,6 +341,4 @@ namespace ConsoleTools
       return source?.IndexOf(toCheck, comp) >= 0;
     }
   }
-
-  public struct MenuItem { public string Name; public int Index; };
 }

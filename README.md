@@ -13,14 +13,15 @@ Nuget package: https://www.nuget.org/packages/ConsoleMenu-simple
         .Add("Sub_Three", () => SomeAction("Sub_Three"))
         .Add("Sub_Four", () => SomeAction("Sub_Four"))
         .Add("Sub_Close", ConsoleMenu.Close)
-        .Add("Sub_Exit", () => Environment.Exit(0));
         
       var menu = new ConsoleMenu(args, level: 0)
         .Add("One", () => SomeAction("One"))
         .Add("Two", () => SomeAction("Two"))
         .Add("Three", () => SomeAction("Three"))
         .Add("Sub", subMenu.Show)
+        .Add("Change me", (thisMenu) => thisMenu.CurrentItem.Name = "I am changed!")
         .Add("Close", ConsoleMenu.Close)
+        .Add("Action then Close", (thisMenu) => { SomeAction("Close"); thisMenu.CloseMenu(); })
         .Add("Exit", () => Environment.Exit(0))
         .Configure(config => { config.Selector = "--> "; });
 
