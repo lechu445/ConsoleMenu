@@ -223,7 +223,7 @@ namespace ConsoleTools
                 filter.Append(key.KeyChar);
               }
               UpdateVisibility(_menuItems, visibility,
-                (item) => Contains(item.Name, filter.ToString(), StringComparison.OrdinalIgnoreCase));
+                (item) => item.Name.Contains(filter.ToString(), StringComparison.OrdinalIgnoreCase));
             }
             else
             {
@@ -334,11 +334,6 @@ namespace ConsoleTools
       {
         visibility[i] = matchFilter(items[i]);
       }
-    }
-
-    public static bool Contains(string source, string toCheck, StringComparison comp)
-    {
-      return source?.IndexOf(toCheck, comp) >= 0;
     }
   }
 }

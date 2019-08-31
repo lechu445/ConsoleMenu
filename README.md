@@ -12,7 +12,7 @@ Nuget package: https://www.nuget.org/packages/ConsoleMenu-simple
         .Add("Sub_Two", () => SomeAction("Sub_Two"))
         .Add("Sub_Three", () => SomeAction("Sub_Three"))
         .Add("Sub_Four", () => SomeAction("Sub_Four"))
-        .Add("Sub_Close", ConsoleMenu.Close)
+        .Add("Sub_Close", ConsoleMenu.Close);
         
       var menu = new ConsoleMenu(args, level: 0)
         .Add("One", () => SomeAction("One"))
