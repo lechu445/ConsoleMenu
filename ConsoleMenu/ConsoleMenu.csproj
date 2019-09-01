@@ -8,13 +8,12 @@
     <Description>A simple, highly customizable, DOS-like console menu</Description>
     <PackageReleaseNotes>
       - add property Items and CurrentItem that you can access current menu item `menu.Items` and `menu.CurrentItem`
-      - allow change Name and Action of MenuItem via setter `.Add("Change me", (thisMenu) => thisMenu.CurrentItem.Name = "I am changed!")`
-      - allow do action then close menu `.Add("Action then Close", (thisMenu) => { SomeAction("Close"); thisMenu.CloseMenu(); })`
+      - allow change Name and Action of MenuItem via setter `.Add("Change me", (thisMenu) =&gt; thisMenu.CurrentItem.Name = "I am changed!")`
+      - allow do action then close menu `.Add("Action then Close", (thisMenu) =&gt; { SomeAction("Close"); thisMenu.CloseMenu(); })`
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/lechu445/ConsoleMenu</PackageProjectUrl>
     <Version>2.3.1.0</Version>
     <RepositoryUrl></RepositoryUrl>
     <PackageTags>console, menu, simple</PackageTags>
   </PropertyGroup>
-
 </Project>
