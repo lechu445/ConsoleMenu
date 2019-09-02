@@ -8,6 +8,7 @@ namespace ConsoleTools
 {
   public class ConsoleMenu
   {
+    private List<string> titles = new List<string>();
     private readonly MenuConfig _config = new MenuConfig();
     private readonly List<MenuItem> _menuItems = new List<MenuItem>();
     private int? _selectedIndex;
@@ -51,6 +52,10 @@ namespace ConsoleTools
         throw new ArgumentNullException(nameof(args));
       }
       SetSeletedItems(args, level);
+      if (_config.Title != null)
+      {
+        this.titles.Add(_config.Title);
+      }
     }
 
     /// <summary>
@@ -89,6 +94,13 @@ namespace ConsoleTools
 
     public ConsoleMenu Add(string name, Action action)
     {
+      if (action.Target is ConsoleMenu child && action == child.Show)
+      {
+        var list = new List<string>();
+        list.AddRange(this.titles);
+        list.AddRange(child.titles);
+        child.titles = list;
+      }
       _menuItems.Add(new MenuItem(name, action, index: _menuItems.Count));
       return this;
     }
@@ -143,6 +155,14 @@ namespace ConsoleTools
           if (_config.ClearConsole)
           {
             this.console.Clear();
+          }
+          if (_config.EnableBreadcrumb)
+          {
+            _config.WriteBreadcrumbAction(this.titles);
+          }
+          if (_config.EnableWriteTitle)
+          {
+            _config.WriteTitleAction(_config.Title);
           }
           _config.WriteHeaderAction();
 

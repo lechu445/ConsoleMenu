@@ -14,7 +14,14 @@ namespace ConsoleMenuSampleApp
         .Add("Sub_Four", () => SomeAction("Sub_Four"))
         .Add("Sub_Close", ConsoleMenu.Close)
         .Add("Sub_Exit", () => Environment.Exit(0))
-        .Configure(config => { config.Selector = "--> "; config.EnableFilter = true; });
+        .Configure(config =>
+        {
+          config.Selector = "--> ";
+          config.EnableFilter = true;
+          config.Title = "Submenu";
+          config.EnableBreadcrumb = true;
+          config.WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" / ", titles));
+        });
 
       var menu = new ConsoleMenu(args, level: 0)
         .Add("One", () => SomeAction("One"))
@@ -25,7 +32,14 @@ namespace ConsoleMenuSampleApp
         .Add("Close", ConsoleMenu.Close)
         .Add("Action then Close", (thisMenu) => { SomeAction("Closing action..."); thisMenu.CloseMenu(); })
         .Add("Exit", () => Environment.Exit(0))
-        .Configure(config => { config.Selector = "--> "; config.EnableFilter = true; });
+        .Configure(config =>
+        {
+          config.Selector = "--> ";
+          config.EnableFilter = true;
+          config.Title = "Main menu";
+          config.EnableWriteTitle = true;
+          config.EnableBreadcrumb = true;
+        });
 
       menu.Show();
     }

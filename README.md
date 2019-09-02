@@ -12,7 +12,15 @@ Nuget package: https://www.nuget.org/packages/ConsoleMenu-simple
         .Add("Sub_Two", () => SomeAction("Sub_Two"))
         .Add("Sub_Three", () => SomeAction("Sub_Three"))
         .Add("Sub_Four", () => SomeAction("Sub_Four"))
-        .Add("Sub_Close", ConsoleMenu.Close);
+        .Add("Sub_Close", ConsoleMenu.Close)
+		.Configure(config =>
+        {
+          config.Selector = "--> ";
+          config.EnableFilter = true;
+          config.Title = "Submenu";
+          config.EnableBreadcrumb = true;
+          config.WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" / ", titles));
+        });
         
       var menu = new ConsoleMenu(args, level: 0)
         .Add("One", () => SomeAction("One"))
@@ -23,7 +31,14 @@ Nuget package: https://www.nuget.org/packages/ConsoleMenu-simple
         .Add("Close", ConsoleMenu.Close)
         .Add("Action then Close", (thisMenu) => { SomeAction("Close"); thisMenu.CloseMenu(); })
         .Add("Exit", () => Environment.Exit(0))
-        .Configure(config => { config.Selector = "--> "; });
+        .Configure(config =>
+        {
+          config.Selector = "--> ";
+          config.EnableFilter = true;
+          config.Title = "Main menu";
+          config.EnableWriteTitle = true;
+          config.EnableBreadcrumb = true;
+        });
 
       menu.Show();
 ```
@@ -54,6 +69,11 @@ You can also define configuration via .Configure() method. The default config lo
     public bool EnableFilter = false;
     public string ArgsPreselectedItemsKey = "--menu-select=";
     public char ArgsPreselectedItemsValueSeparator = '.';
+    public bool EnableWriteTitle = false;
+    public string Title = "My menu";
+    public Action<string> WriteTitleAction = title => Console.WriteLine(title);
+    public bool EnableBreadcrumb = false;
+    public Action<IReadOnlyList<string>> WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" > ", titles));
   }
 ```
 Example:

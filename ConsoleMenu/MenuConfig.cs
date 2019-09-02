@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ConsoleTools
 {
@@ -39,5 +40,20 @@ namespace ConsoleTools
 
     /// <summary>default: '.'</summary>
     public char ArgsPreselectedItemsValueSeparator = '.';
+
+    /// <summary>default: false</summary>
+    public bool EnableWriteTitle = false;
+
+    /// <summary>Menu title to write at top of the menu. default: "My menu"</summary>
+    public string Title = "My menu";
+
+    /// <summary>default: title => Console.WriteLine(title)</summary>
+    public Action<string> WriteTitleAction = title => Console.WriteLine(title);
+
+    /// <summary>default: false</summary>
+    public bool EnableBreadcrumb = false;
+
+    /// <summary>default: titles => Console.WriteLine(string.Join(" > ", titles))</summary>
+    public Action<IReadOnlyList<string>> WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" > ", titles));
   }
 }
