@@ -12,7 +12,7 @@ namespace ConsoleTools
     private readonly MenuConfig _config = new MenuConfig();
     private readonly List<MenuItem> _menuItems = new List<MenuItem>();
     private int? _selectedIndex;
-    private string _selectedName;
+    private string? _selectedName;
     private bool close;
     private int currentItemIndex;
     internal IConsole console = new SystemConsole();
@@ -41,15 +41,14 @@ namespace ConsoleTools
     /// </summary>
     /// <param name="args">args collection from Main</param>
     /// <param name="level">Level of whole menu</param>
-    public ConsoleMenu(string[] args, int level)
+    public ConsoleMenu(string[]? args, int level)
     {
-      if(level < 0)
+      if (args == null)
+        throw new ArgumentNullException(nameof(args));
+
+      if (level < 0)
       {
         throw new ArgumentException("Cannot be below 0", nameof(level));
-      }
-      if(args == null)
-      {
-        throw new ArgumentNullException(nameof(args));
       }
       SetSeletedItems(args, level);
       if (_config.Title != null)
@@ -92,8 +91,14 @@ namespace ConsoleTools
       }
     }
 
-    public ConsoleMenu Add(string name, Action action)
+    public ConsoleMenu Add(string? name, Action? action)
     {
+      if (name == null)
+        throw new ArgumentNullException(nameof(name));
+
+      if (action == null)
+        throw new ArgumentNullException(nameof(action));
+
       if (action.Target is ConsoleMenu child && action == child.Show)
       {
         var list = new List<string>();
@@ -105,14 +110,23 @@ namespace ConsoleTools
       return this;
     }
 
-    public ConsoleMenu Add(string name, Action<ConsoleMenu> action)
+    public ConsoleMenu Add(string? name, Action<ConsoleMenu>? action)
     {
+      if (name == null)
+        throw new ArgumentNullException(nameof(name));
+
+      if (action is null)
+        throw new ArgumentNullException(nameof(action));
+
       _menuItems.Add(new MenuItem(name, () => action(this), index: _menuItems.Count));
       return this;
     }
 
-    public ConsoleMenu AddRange(IEnumerable<Tuple<string, Action>> menuItems)
+    public ConsoleMenu AddRange(IEnumerable<Tuple<string, Action>>? menuItems)
     {
+      if (menuItems == null)
+        throw new ArgumentNullException(nameof(menuItems));
+
       foreach (var item in menuItems)
       {
         Add(item.Item1, item.Item2);
@@ -120,8 +134,11 @@ namespace ConsoleTools
       return this;
     }
 
-    public ConsoleMenu Configure(Action<MenuConfig> configure)
+    public ConsoleMenu Configure(Action<MenuConfig>? configure)
     {
+      if (configure is null)
+        throw new ArgumentNullException(nameof(configure));
+
       configure?.Invoke(_config);
       return this;
     }
@@ -272,7 +289,7 @@ namespace ConsoleTools
       }
     }
 
-    private MenuItem GetSeletedItem()
+    private MenuItem? GetSeletedItem()
     {
       if(_selectedIndex.HasValue && _selectedIndex.Value < _menuItems.Count)
       {

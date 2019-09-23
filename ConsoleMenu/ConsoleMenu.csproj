@@ -13,6 +13,8 @@
     <RepositoryUrl></RepositoryUrl>
     <PackageTags>console, menu, simple</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
