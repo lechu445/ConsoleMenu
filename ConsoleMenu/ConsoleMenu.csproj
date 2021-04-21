@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFrameworks>netstandard1.3;net5.0</TargetFrameworks>
     <PackageId>ConsoleMenu-simple</PackageId>
     <Authors>lechu445</Authors>
     <Product>ConsoleMenu-simple</Product>

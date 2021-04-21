@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ConsoleTools;
 
-internal class SystemConsole : IConsole
+internal sealed class SystemConsole : IConsole
 {
   public bool IsOutputRedirected => Console.IsOutputRedirected;
 

@@ -11,26 +11,26 @@ namespace ConsoleMenuTests
     public void Breadcrumbs()
     {
       var console = new TestConsole();
-      console.AddUserInputWithActionBefore("1", () => Assert.Equal(@"First menu
+      console.AddUserInputWithActionBefore("1", () => AssertHelper.Equal(@"First menu
 Pick an option:
 >> [0] One
    [1] Two
    [2] Close
    [3] Exit
-", console.ToString(), ignoreLineEndingDifferences: true));
+", console.ToString()));
 
-      console.AddUserInputWithActionBefore("0", () => Assert.Equal(@"First menu > Second menu
+      console.AddUserInputWithActionBefore("0", () => AssertHelper.Equal(@"First menu > Second menu
 Pick an option:
 >> [0] Close
-", console.ToString(), ignoreLineEndingDifferences: true));
+", console.ToString()));
 
-      console.AddUserInputWithActionBefore("2", () => Assert.Equal(@"First menu
+      console.AddUserInputWithActionBefore("2", () => AssertHelper.Equal(@"First menu
 Pick an option:
    [0] One
 >> [1] Two
    [2] Close
    [3] Exit
-", console.ToString(), ignoreLineEndingDifferences: true));
+", console.ToString()));
 
       var submenu = new ConsoleMenu { console = console }
         .Add("Close", ConsoleMenu.Close)
@@ -56,14 +56,14 @@ Pick an option:
       });
       menu.Show();
 
-      Assert.Equal(@"First menu
+      AssertHelper.Equal(@"First menu
 Pick an option:
    [0] One
    [1] Two
 >> [2] Close
    [3] Exit
 
-", console.ToString(), ignoreLineEndingDifferences: true);
+", console.ToString());
     }
   }
 }
