@@ -6,18 +6,19 @@
     <Authors>lechu445</Authors>
     <Product>ConsoleMenu-simple</Product>
     <Description>A simple, highly customizable, DOS-like console menu</Description>
-    <PackageReleaseNotes>- add writing of Title of menu (needs to be enabled in config)
-- add writing of navigation breadcrumb (needs to be enabled in config)</PackageReleaseNotes>
+    <PackageReleaseNotes>- fix breadcrumb was not working correctly</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/lechu445/ConsoleMenu</PackageProjectUrl>
     <Version>2.4.1</Version>
     <RepositoryUrl></RepositoryUrl>
     <PackageTags>console, menu, simple</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
     <None Include="..\LICENSE.txt">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

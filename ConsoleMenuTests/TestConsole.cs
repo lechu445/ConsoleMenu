@@ -10,7 +10,8 @@ namespace ConsoleMenuTests
   {
     private MemoryStream output;
     private StreamWriter outputWriter;
-    private readonly Queue<Func<string>> GetUserInputs = new Queue<Func<string>>();
+    private readonly Queue<Func<string>> GetUserInputs = new();
+    public bool Details;
 
     public override string ToString()
     {
@@ -42,7 +43,7 @@ namespace ConsoleMenuTests
 
     public TextWriter Error => throw new NotImplementedException();
 
-    public ConsoleColor ForegroundColor { get; set; }
+    public ConsoleColor ForegroundColor { get; set; } = ConsoleColor.White;
 
     public Encoding InputEncoding { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
@@ -65,7 +66,7 @@ namespace ConsoleMenuTests
     public TextWriter Out => throw new NotImplementedException();
 
     public Encoding OutputEncoding { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public string Title { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public string Title { get; set; }
     public bool TreatControlCAsInput { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     public int WindowHeight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     public int WindowWidth { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -76,12 +77,12 @@ namespace ConsoleMenuTests
 
     public void Beep()
     {
-      throw new NotImplementedException();
+      throw new NotSupportedException("Test Console cannot do this operation.");
     }
 
     public void Beep(int frequency, int duration)
     {
-      throw new NotImplementedException();
+      throw new NotSupportedException("Test Console cannot do this operation.");
     }
 
     public void Clear()
@@ -166,17 +167,17 @@ namespace ConsoleMenuTests
 
     public void SetBufferSize(int width, int height)
     {
-      throw new NotImplementedException();
+      throw new NotSupportedException("Test Console cannot do this operation.");
     }
 
     public void SetCursorPosition(int left, int top)
     {
-      throw new NotImplementedException();
+      throw new NotSupportedException("Test Console cannot do this operation.");
     }
 
     public void SetError(TextWriter newError)
     {
-      throw new NotImplementedException();
+      throw new NotSupportedException("Test Console cannot do this operation.");
     }
 
     public void SetIn(TextReader newIn)
@@ -197,117 +198,135 @@ namespace ConsoleMenuTests
 
     public void SetWindowPosition(int left, int top)
     {
-      throw new NotImplementedException();
+      throw new NotSupportedException("Test Console cannot do this operation.");
     }
 
     public void SetWindowSize(int width, int height)
     {
-      throw new NotImplementedException();
+      throw new NotSupportedException("Test Console cannot do this operation.");
     }
 
     public void Write(char[] buffer, int index, int count)
-      => this.outputWriter.Write(buffer, index, count);
+      => this.Write(new string(buffer, index, count));
 
     public void Write(char[] buffer)
-      => this.outputWriter.Write(buffer);
+      => this.Write(new string(buffer));
 
     public void Write(float value)
-      => this.outputWriter.Write(value);
+      => this.Write(value.ToString());
 
     public void Write(bool value)
-      => this.outputWriter.Write(value);
+      => this.Write(value.ToString());
 
     public void Write(decimal value)
-      => this.outputWriter.Write(value);
+      => this.Write(value.ToString());
 
     public void Write(char value)
-      => this.outputWriter.Write(value);
+      => this.Write(value.ToString());
 
     public void Write(double value)
-      => this.outputWriter.Write(value);
+      => this.Write(value.ToString());
 
     public void Write(int value)
-      => this.outputWriter.Write(value);
+      => this.Write(value.ToString());
 
     public void Write(long value)
-      => this.outputWriter.Write(value);
+      => this.Write(value.ToString());
 
     public void Write(string value)
-      => this.outputWriter.Write(value);
+    {
+      this.outputWriter.Write(value);
+
+      if (this.Details)
+      {
+        this.outputWriter.Write($"<fc: {ForegroundColor}, bc: {BackgroundColor}>");
+      }
+    }
 
     public void Write(string format, object arg0)
-      => this.outputWriter.Write(format, arg0);
+      => this.Write(string.Format(format, arg0));
 
     public void Write(string format, object arg0, object arg1)
-      => this.outputWriter.Write(format, arg0, arg1);
+      => this.Write(string.Format(format, arg0, arg1));
 
     public void Write(string format, object arg0, object arg1, object arg2)
-      => this.outputWriter.Write(format, arg0, arg1, arg2);
+      => this.Write(string.Format(format, arg0, arg1, arg2));
 
     public void Write(string format, params object[] arg)
-      => this.outputWriter.Write(format, arg);
+      => this.Write(string.Format(format, arg));
 
     public void Write(uint value)
-      => this.outputWriter.Write(value);
+      => this.Write(value.ToString());
 
     public void Write(ulong value)
-      => this.outputWriter.Write(value);
+      => this.Write(value.ToString());
 
     public void Write(object value)
-      => this.outputWriter.Write(value);
+      => this.Write(value.ToString());
 
     public void WriteLine()
       => this.outputWriter.WriteLine();
 
     public void WriteLine(bool value)
-      => this.outputWriter.WriteLine(value);
+      => this.WriteLine(value.ToString());
 
     public void WriteLine(char value)
-      => this.outputWriter.WriteLine(value);
+      => this.WriteLine(value.ToString());
 
     public void WriteLine(char[] buffer)
-      => this.outputWriter.WriteLine(buffer);
+      => this.WriteLine(new string(buffer));
 
     public void WriteLine(ulong value)
-      => this.outputWriter.WriteLine(value);
+      => this.WriteLine(value.ToString());
 
     public void WriteLine(double value)
-      => this.outputWriter.WriteLine(value);
+      => this.WriteLine(value.ToString());
 
     public void WriteLine(int value)
-      => this.outputWriter.WriteLine(value);
+      => this.WriteLine(value.ToString());
 
     public void WriteLine(long value)
-      => this.outputWriter.WriteLine(value);
+      => this.WriteLine(value.ToString());
 
     public void WriteLine(object value)
-      => this.outputWriter.WriteLine(value);
+      => this.WriteLine(value.ToString());
 
     public void WriteLine(float value)
-      => this.outputWriter.WriteLine(value);
+      => this.WriteLine(value.ToString());
 
     public void WriteLine(string value)
-      => this.outputWriter.WriteLine(value);
+    {
+      if (this.Details)
+      {
+        this.outputWriter.Write(value);
+        this.outputWriter.Write($"<fc: {ForegroundColor}, bc: {BackgroundColor}>");
+        this.outputWriter.WriteLine();
+      }
+      else
+      {
+        this.outputWriter.WriteLine(value);
+      }
+    }
 
     public void WriteLine(string format, object arg0)
-      => this.outputWriter.WriteLine(format, arg0);
+      => this.WriteLine(string.Format(format, arg0));
 
     public void WriteLine(string format, object arg0, object arg1)
-      => this.outputWriter.WriteLine(format, arg0, arg1);
+      => this.WriteLine(string.Format(format, arg0, arg1));
 
     public void WriteLine(string format, object arg0, object arg1, object arg2)
-      => this.outputWriter.WriteLine(format, arg0, arg1, arg2);
+      => this.WriteLine(string.Format(format, arg0, arg1, arg2));
 
     public void WriteLine(string format, params object[] arg)
-      => this.outputWriter.WriteLine(format, arg);
+      => this.WriteLine(string.Format(format, arg));
 
     public void WriteLine(uint value)
-      => this.outputWriter.WriteLine(value);
+      => this.WriteLine(value.ToString());
 
     public void WriteLine(decimal value)
-      => this.outputWriter.WriteLine(value);
+      => this.WriteLine(value.ToString());
 
     public void WriteLine(char[] buffer, int index, int count)
-      => this.outputWriter.WriteLine(buffer, index, count);
+      => this.WriteLine(new string(buffer, index, count));
   }
 }

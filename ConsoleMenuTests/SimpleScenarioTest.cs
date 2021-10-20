@@ -1,3 +1,4 @@
+using ConsoleMenuTests.TestHelpers;
 using ConsoleTools;
 using System;
 using Xunit;
@@ -19,12 +20,7 @@ namespace ConsoleMenuTests
       .Add("Exit", () => Environment.Exit(0))
       .Configure(m =>
       {
-        m.SelectedItemBackgroundColor = console.ForegroundColor;
-        m.SelectedItemForegroundColor = console.BackgroundColor;
-        m.ItemBackgroundColor = console.BackgroundColor;
-        m.ItemForegroundColor = console.ForegroundColor;
-        m.WriteHeaderAction = () => console.WriteLine("Pick an option:");
-        m.WriteItemAction = item => console.Write("[{0}] {1}", item.Index, item.Name);
+        ConfigHelper.BaseTestConfiguration(m, console);
       });
       menu.Show();
 
@@ -38,62 +34,27 @@ namespace ConsoleMenuTests
     }
 
     [Fact]
-    public void Breadcrumbs()
+    public void SimpleScenario_Colors()
     {
-      var console = new TestConsole();
-      console.AddUserInputWithActionBefore("1", () => Assert.Equal(@"First menu
-Pick an option:
->> [0] One
-   [1] Two
-   [2] Close
-   [3] Exit
-", console.ToString(), ignoreLineEndingDifferences: true));
-
-      console.AddUserInputWithActionBefore("0", () => Assert.Equal(@"First menu > Second menu
-Pick an option:
->> [0] Close
-", console.ToString(), ignoreLineEndingDifferences: true));
-
-      console.AddUserInputWithActionBefore("2", () => Assert.Equal(@"First menu
-Pick an option:
-   [0] One
->> [1] Two
-   [2] Close
-   [3] Exit
-", console.ToString(), ignoreLineEndingDifferences: true));
-
-      var submenu = new ConsoleMenu { console = console }
-        .Add("Close", ConsoleMenu.Close)
-      .Configure(m =>
-      {
-        m.WriteHeaderAction = () => console.WriteLine("Pick an option:");
-        m.WriteItemAction = item => console.Write("[{0}] {1}", item.Index, item.Name);
-        m.EnableBreadcrumb = true;
-        m.WriteBreadcrumbAction = titles => console.WriteLine(string.Join(" > ", titles));
-        m.Title = "Second menu";
-      });
+      var console = new TestConsole { Details = true };
+      console.AddUserInput("2");
 
       var menu = new ConsoleMenu() { console = console }
       .Add("One", () => { })
-      .Add("Two", submenu.Show)
+      .Add("Two", () => { })
       .Add("Close", ConsoleMenu.Close)
       .Add("Exit", () => Environment.Exit(0))
       .Configure(m =>
       {
-        m.WriteHeaderAction = () => console.WriteLine("Pick an option:");
-        m.WriteItemAction = item => console.Write("[{0}] {1}", item.Index, item.Name);
-        m.EnableBreadcrumb = true;
-        m.WriteBreadcrumbAction = titles => console.WriteLine(string.Join(" > ", titles));
-        m.Title = "First menu";
+        ConfigHelper.BaseTestConfiguration(m, console);
       });
       menu.Show();
 
-      Assert.Equal(@"First menu
-Pick an option:
-   [0] One
-   [1] Two
->> [2] Close
-   [3] Exit
+      Assert.Equal(@"Pick an option:<fc: White, bc: Black>
+   <fc: White, bc: Black>[0] One<fc: White, bc: Black>
+   <fc: White, bc: Black>[1] Two<fc: White, bc: Black>
+>> <fc: Black, bc: White>[2] Close<fc: Black, bc: White>
+   <fc: White, bc: Black>[3] Exit<fc: White, bc: Black>
 
 ", console.ToString(), ignoreLineEndingDifferences: true);
     }
