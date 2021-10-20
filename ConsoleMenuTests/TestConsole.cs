@@ -6,13 +6,11 @@ using System.Text;
 
 namespace ConsoleMenuTests
 {
-  internal class TestConsole : IConsole
+  internal sealed class TestConsole : IConsole
   {
     private MemoryStream output;
     private StreamWriter outputWriter;
-    private MemoryStream input;
-    private StringReader inputReader;
-    public List<Action<string>> asserts;
+    private readonly Queue<Func<string>> GetUserInputs = new Queue<Func<string>>();
 
     public override string ToString()
     {
@@ -24,10 +22,8 @@ namespace ConsoleMenuTests
       return text;
     }
 
-    public TestConsole(string input)
+    public TestConsole()
     {
-      this.input = new MemoryStream(Encoding.UTF8.GetBytes(input));
-      this.inputReader = new StringReader(input);
       this.output = new MemoryStream();
       this.outputWriter = new StreamWriter(output) { AutoFlush = true };
     }
@@ -90,7 +86,7 @@ namespace ConsoleMenuTests
 
     public void Clear()
     {
-      this.output.Position = 0;
+      this.output.SetLength(0);
     }
 
     public void MoveBufferArea(int sourceLeft, int sourceTop, int sourceWidth, int sourceHeight, int targetLeft, int targetTop)
@@ -123,9 +119,23 @@ namespace ConsoleMenuTests
       throw new NotImplementedException();
     }
 
+    public void AddUserInput(string text)
+    {
+      GetUserInputs.Enqueue(() => text);
+    }
+
+    public void AddUserInputWithActionBefore(string text, Action action)
+    {
+      GetUserInputs.Enqueue(() =>
+      {
+        action();
+        return text;
+      });
+    }
+
     public ConsoleKeyInfo ReadKey(bool intercept)
     {
-      var line = this.inputReader.ReadLine();
+      var line = this.GetUserInputs.Dequeue().Invoke();
       if (line.Length > 1)
       {
         throw new ArgumentException($"input should be single character but was `{line}`");
@@ -143,7 +153,7 @@ namespace ConsoleMenuTests
 
     public string ReadLine()
     {
-      var line = this.inputReader.ReadLine();
+      var line = this.GetUserInputs.Dequeue().Invoke();
       this.outputWriter.Write(line);
       this.outputWriter.WriteLine("\t//typed from keyboard");
       return line;

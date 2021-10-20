@@ -9,7 +9,7 @@
     <PackageReleaseNotes>- add writing of Title of menu (needs to be enabled in config)
 - add writing of navigation breadcrumb (needs to be enabled in config)</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/lechu445/ConsoleMenu</PackageProjectUrl>
-    <Version>2.4.0.0</Version>
+    <Version>2.4.1</Version>
     <RepositoryUrl></RepositoryUrl>
     <PackageTags>console, menu, simple</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>

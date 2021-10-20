@@ -8,7 +8,6 @@ namespace ConsoleTools
 {
   public class ConsoleMenu
   {
-    private List<string> titles = new List<string>();
     private readonly MenuConfig _config = new MenuConfig();
     private readonly List<MenuItem> _menuItems = new List<MenuItem>();
     private int? _selectedIndex;
@@ -31,6 +30,24 @@ namespace ConsoleTools
       set => _menuItems[currentItemIndex] = value;
     }
 
+    private ConsoleMenu? Parent = null;
+
+    private IReadOnlyList<string> Titles
+    {
+      get
+      {
+        ConsoleMenu? current = this;
+        List<string> titles = new List<string>();
+        while (current != null)
+        {
+          titles.Add(current._config.Title ?? "");
+          current = current.Parent;
+        }
+        titles.Reverse();
+        return titles;
+      }
+    }
+
     /// <summary>
     /// Creates ConsoleMenu instance
     /// </summary>
@@ -51,10 +68,6 @@ namespace ConsoleTools
         throw new ArgumentException("Cannot be below 0", nameof(level));
       }
       SetSeletedItems(args, level);
-      if (_config.Title != null)
-      {
-        this.titles.Add(_config.Title);
-      }
     }
 
     /// <summary>
@@ -101,10 +114,7 @@ namespace ConsoleTools
 
       if (action.Target is ConsoleMenu child && action == child.Show)
       {
-        var list = new List<string>();
-        list.AddRange(this.titles);
-        list.AddRange(child.titles);
-        child.titles = list;
+        child.Parent = this;
       }
       _menuItems.Add(new MenuItem(name, action, index: _menuItems.Count));
       return this;
@@ -175,7 +185,7 @@ namespace ConsoleTools
           }
           if (_config.EnableBreadcrumb)
           {
-            _config.WriteBreadcrumbAction(this.titles);
+            _config.WriteBreadcrumbAction(this.Titles);
           }
           if (_config.EnableWriteTitle)
           {
