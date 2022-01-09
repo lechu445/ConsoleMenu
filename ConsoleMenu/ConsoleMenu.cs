@@ -8,13 +8,35 @@ namespace ConsoleTools;
 
 public class ConsoleMenu
 {
+  internal IConsole console = new SystemConsole();
   private readonly MenuConfig _config = new MenuConfig();
   private readonly List<MenuItem> _menuItems = new List<MenuItem>();
   private int? _selectedIndex;
   private string? _selectedName;
   private bool close;
   private int currentItemIndex;
-  internal IConsole console = new SystemConsole();
+
+  /// <summary>
+  /// Creates ConsoleMenu instance
+  /// </summary>
+  public ConsoleMenu() { }
+
+  /// <summary>
+  /// Creates ConsoleMenu instance with possibility to pre-select items via console parameter
+  /// </summary>
+  /// <param name="args">args collection from Main</param>
+  /// <param name="level">Level of whole menu</param>
+  public ConsoleMenu(string[]? args, int level)
+  {
+    if (args == null)
+      throw new ArgumentNullException(nameof(args));
+
+    if (level < 0)
+    {
+      throw new ArgumentException("Cannot be below 0", nameof(level));
+    }
+    SetSeletedItems(args, level);
+  }
 
   /// <summary>
   /// Menu items that can be modified
@@ -46,28 +68,6 @@ public class ConsoleMenu
       titles.Reverse();
       return titles;
     }
-  }
-
-  /// <summary>
-  /// Creates ConsoleMenu instance
-  /// </summary>
-  public ConsoleMenu() { }
-
-  /// <summary>
-  /// Creates ConsoleMenu instance with possibility to pre-select items via console parameter
-  /// </summary>
-  /// <param name="args">args collection from Main</param>
-  /// <param name="level">Level of whole menu</param>
-  public ConsoleMenu(string[]? args, int level)
-  {
-    if (args == null)
-      throw new ArgumentNullException(nameof(args));
-
-    if (level < 0)
-    {
-      throw new ArgumentException("Cannot be below 0", nameof(level));
-    }
-    SetSeletedItems(args, level);
   }
 
   /// <summary>
