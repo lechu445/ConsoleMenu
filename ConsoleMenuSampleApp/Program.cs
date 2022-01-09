@@ -1,5 +1,5 @@
-﻿using ConsoleTools;
-using System;
+﻿using System;
+using ConsoleTools;
 
 namespace ConsoleMenuSampleApp
 {
@@ -7,21 +7,31 @@ namespace ConsoleMenuSampleApp
   {
     static void Main(string[] args)
     {
+      var subMenu1 = new ConsoleMenu(args, level: 2)
+        .Add("One", () => SomeAction("One1"))
+          .Add("Sub_Close", ConsoleMenu.Close)
+          .Add("Sub_Exit", () => Environment.Exit(0))
+          .Configure(config =>
+          {
+            config.Selector = "--> ";
+            config.EnableFilter = true;
+            config.Title = "Submenu1";
+            config.EnableBreadcrumb = true;
+            config.WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" / ", titles));
+          });
+
       var subMenu = new ConsoleMenu(args, level: 1)
-        .Add("Sub_One", () => SomeAction("Sub_One"))
-        .Add("Sub_Two", () => SomeAction("Sub_Two"))
-        .Add("Sub_Three", () => SomeAction("Sub_Three"))
-        .Add("Sub_Four", () => SomeAction("Sub_Four"))
-        .Add("Sub_Close", ConsoleMenu.Close)
-        .Add("Sub_Exit", () => Environment.Exit(0))
-        .Configure(config =>
-        {
-          config.Selector = "--> ";
-          config.EnableFilter = true;
-          config.Title = "Submenu";
-          config.EnableBreadcrumb = true;
-          config.WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" / ", titles));
-        });
+      .Add("Sub", subMenu1.Show)
+      .Add("Sub_Close", ConsoleMenu.Close)
+      .Add("Sub_Exit", () => Environment.Exit(0))
+      .Configure(config =>
+      {
+        config.Selector = "--> ";
+        config.EnableFilter = true;
+        config.Title = "Submenu";
+        config.EnableBreadcrumb = true;
+        config.WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" / ", titles));
+      });
 
       var menu = new ConsoleMenu(args, level: 0)
         .Add("One", () => SomeAction("One"))

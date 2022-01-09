@@ -1,8 +1,8 @@
-﻿using ConsoleTools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using ConsoleTools;
 
 namespace ConsoleMenuTests
 {
@@ -120,9 +120,21 @@ namespace ConsoleMenuTests
       throw new NotImplementedException();
     }
 
+    public void AddUserInput(ConsoleKey key)
+    {
+      string input = ((char)key).ToString();
+      AddUserInput(input);
+    }
+
     public void AddUserInput(string text)
     {
       GetUserInputs.Enqueue(() => text);
+    }
+
+    public void AddUserInputWithActionBefore(ConsoleKey key, Action action)
+    {
+      string input = ((char)key).ToString();
+      AddUserInputWithActionBefore(input, action);
     }
 
     public void AddUserInputWithActionBefore(string text, Action action)

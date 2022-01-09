@@ -1,6 +1,6 @@
+using System;
 using ConsoleMenuTests.TestHelpers;
 using ConsoleTools;
-using System;
 using Xunit;
 
 namespace ConsoleMenuTests

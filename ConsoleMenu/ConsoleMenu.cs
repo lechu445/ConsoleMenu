@@ -1,6 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 [assembly: InternalsVisibleTo("ConsoleMenuTests")]
@@ -92,7 +92,7 @@ namespace ConsoleTools
       }
       arg = arg.Replace(paramKey, string.Empty).Trim();
       var items = arg.SplitItems(_config.ArgsPreselectedItemsValueSeparator, '\'');
-      if (level <= items.Count)
+      if (level < items.Count)
       {
         var item = items[level].Trim('\'');
         if (int.TryParse(item, out var selectedIndex))
@@ -161,7 +161,7 @@ namespace ConsoleTools
     public void Show()
     {
       var selectedItem = GetSeletedItem();
-      if(selectedItem != null)
+      if (selectedItem != null)
       {
         selectedItem.Action.Invoke();
         return;
@@ -178,7 +178,7 @@ namespace ConsoleTools
       {
         do
         {
-          redraw:
+redraw:
           if (_config.ClearConsole)
           {
             this.console.Clear();
@@ -238,7 +238,7 @@ namespace ConsoleTools
             this.console.Write(_config.FilterPrompt + filter);
           }
 
-          readKey:
+readKey:
           key = this.console.ReadKey(true);
 
           if (key.Key == ConsoleKey.DownArrow)
@@ -265,7 +265,7 @@ namespace ConsoleTools
                   filter.Length--;
                 }
               }
-              else if(!char.IsControl(key.KeyChar))
+              else if (!char.IsControl(key.KeyChar))
               {
                 filter.Append(key.KeyChar);
               }
@@ -301,11 +301,11 @@ namespace ConsoleTools
 
     private MenuItem? GetSeletedItem()
     {
-      if(_selectedIndex.HasValue && _selectedIndex.Value < _menuItems.Count)
+      if (_selectedIndex.HasValue && _selectedIndex.Value < _menuItems.Count)
       {
         return _menuItems[_selectedIndex.Value];
       }
-      if(_selectedName != null)
+      if (_selectedName != null)
       {
         return _menuItems.Find(item => item.Name == _selectedName);
       }
@@ -315,7 +315,7 @@ namespace ConsoleTools
     private int IndexOfNextVisibleItem(int curItem, bool[] visibility)
     {
       int idx = -1;
-      if(curItem + 1 < visibility.Length)
+      if (curItem + 1 < visibility.Length)
       {
         idx = Array.IndexOf(visibility, value: true, startIndex: curItem + 1);
       }
@@ -323,7 +323,7 @@ namespace ConsoleTools
       {
         idx = Array.IndexOf(visibility, value: true, startIndex: 0);
       }
-      if(idx == -1)
+      if (idx == -1)
       {
         idx = curItem;
       }
@@ -333,7 +333,7 @@ namespace ConsoleTools
     private int IndexOfPreviousVisibleItem(int curItem, bool[] visibility)
     {
       int idx = -1;
-      if(curItem - 1 >= 0)
+      if (curItem - 1 >= 0)
       {
         idx = Array.LastIndexOf(visibility, value: true, startIndex: curItem - 1);
       }
