@@ -17,16 +17,19 @@ internal static class Extensions
       {
         isInQuote = !isInQuote;
       }
+
       if (!isInQuote && ch == separator)
       {
         result.Add(input.Substring(start, i - start));
         start = i + 1;
       }
     }
+
     if (start < input.Length)
     {
       result.Add(input.Substring(start, input.Length - start));
     }
+
     return result;
   }
 

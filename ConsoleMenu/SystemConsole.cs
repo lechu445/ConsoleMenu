@@ -9,18 +9,23 @@ internal sealed class SystemConsole : IConsole
   public bool IsOutputRedirected => Console.IsOutputRedirected;
 
   public int BufferHeight { get => Console.BufferHeight; set => Console.BufferHeight = value; }
+
   public int BufferWidth { get => Console.BufferWidth; set => Console.BufferWidth = value; }
 
   public bool CapsLock => Console.CapsLock;
 
   public int CursorLeft { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
   public int CursorSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
   public int CursorTop { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
   public bool CursorVisible { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
   public TextWriter Error => throw new NotImplementedException();
 
   public ConsoleColor ForegroundColor { get => Console.ForegroundColor; set => Console.ForegroundColor = value; }
+
   public Encoding InputEncoding { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
   public bool IsErrorRedirected => throw new NotImplementedException();
@@ -42,11 +47,17 @@ internal sealed class SystemConsole : IConsole
   public TextWriter Out => throw new NotImplementedException();
 
   public Encoding OutputEncoding { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
   public string Title { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
   public bool TreatControlCAsInput { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
   public int WindowHeight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
   public int WindowWidth { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
   public int WindowLeft { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
   public ConsoleColor BackgroundColor { get => Console.BackgroundColor; set => Console.BackgroundColor = value; }
 
   public event ConsoleCancelEventHandler CancelKeyPress;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#pragma warning disable SA1401 // Fields should be private
+using System;
 using System.Collections.Generic;
 
 namespace ConsoleTools;

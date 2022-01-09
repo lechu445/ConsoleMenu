@@ -32,7 +32,7 @@ Pick an option:
    [3] Exit
 ", console.ToString()));
 
-      var submenu = new ConsoleMenu { console = console }
+      var submenu = new ConsoleMenu { Console = console }
         .Add("Close", ConsoleMenu.Close)
       .Configure(m =>
       {
@@ -42,7 +42,7 @@ Pick an option:
         m.Title = "Second menu";
       });
 
-      var menu = new ConsoleMenu() { console = console }
+      var menu = new ConsoleMenu() { Console = console }
       .Add("One", () => { })
       .Add("Two", submenu.Show)
       .Add("Close", ConsoleMenu.Close)

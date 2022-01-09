@@ -48,7 +48,7 @@ Filter: e", console.ToString()));
    [3] Exit
 Filter: e", console.ToString()));
 
-      var submenu = new ConsoleMenu { console = console }
+      var submenu = new ConsoleMenu { Console = console }
         .Add("Close", ConsoleMenu.Close)
       .Configure(m =>
       {
@@ -56,7 +56,7 @@ Filter: e", console.ToString()));
         m.EnableFilter = true;
       });
 
-      var menu = new ConsoleMenu() { console = console }
+      var menu = new ConsoleMenu() { Console = console }
       .Add("One", () => { })
       .Add("Two", submenu.Show)
       .Add("Close", ConsoleMenu.Close)

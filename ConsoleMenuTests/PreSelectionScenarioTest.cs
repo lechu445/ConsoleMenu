@@ -12,7 +12,7 @@ namespace ConsoleMenuTests
     {
       var console = new TestConsole();
 
-      var menu = new ConsoleMenu(args: new[] { "--menu-select=0", }, level: 0) { console = console }
+      var menu = new ConsoleMenu(args: new[] { "--menu-select=0", }, level: 0) { Console = console }
       .Add("One", () => console.Write("Expected action"))
       .Add("Close", ConsoleMenu.Close)
       .Configure(m =>
@@ -30,7 +30,7 @@ namespace ConsoleMenuTests
     {
       var console = new TestConsole();
 
-      var submenu = new ConsoleMenu(args: new[] { "--menu-select=0.1" }, level: 1) { console = console }
+      var submenu = new ConsoleMenu(args: new[] { "--menu-select=0.1" }, level: 1) { Console = console }
       .Add("One", () => { })
       .Add("Two", () => console.Write("Expected action"))
       .Add("Close", ConsoleMenu.Close)
@@ -39,7 +39,7 @@ namespace ConsoleMenuTests
         ConfigHelper.BaseTestConfiguration(m, console);
       });
 
-      var menu = new ConsoleMenu(args: new[] { "--menu-select=0.1" }, level: 0) { console = console }
+      var menu = new ConsoleMenu(args: new[] { "--menu-select=0.1" }, level: 0) { Console = console }
       .Add("One", submenu.Show)
       .Add("Close", ConsoleMenu.Close)
       .Configure(m =>
@@ -56,7 +56,7 @@ namespace ConsoleMenuTests
     {
       var console = new TestConsole();
 
-      var submenu = new ConsoleMenu(args: new[] { "--menu-select=0" }, level: 1) { console = console }
+      var submenu = new ConsoleMenu(args: new[] { "--menu-select=0" }, level: 1) { Console = console }
       .Add("One1", () => console.Write("Should not be chosen"))
       .Add("Close1", ConsoleMenu.Close)
       .Configure(m =>
@@ -64,7 +64,7 @@ namespace ConsoleMenuTests
         ConfigHelper.BaseTestConfiguration(m, console);
       });
 
-      var menu = new ConsoleMenu(args: new[] { "--menu-select=0" }, level: 0) { console = console }
+      var menu = new ConsoleMenu(args: new[] { "--menu-select=0" }, level: 0) { Console = console }
       .Add("One0", submenu.Show)
       .Add("Close0", ConsoleMenu.Close)
       .Configure(m =>

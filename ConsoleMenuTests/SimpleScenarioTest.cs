@@ -13,7 +13,7 @@ namespace ConsoleMenuTests
       var console = new TestConsole();
       console.AddUserInput("2");
 
-      var menu = new ConsoleMenu() { console = console }
+      var menu = new ConsoleMenu() { Console = console }
       .Add("One", () => { })
       .Add("Two", () => { })
       .Add("Close", ConsoleMenu.Close)
@@ -39,7 +39,7 @@ namespace ConsoleMenuTests
       var console = new TestConsole { Details = true };
       console.AddUserInput("2");
 
-      var menu = new ConsoleMenu() { console = console }
+      var menu = new ConsoleMenu() { Console = console }
       .Add("One", () => { })
       .Add("Two", () => { })
       .Add("Close", ConsoleMenu.Close)

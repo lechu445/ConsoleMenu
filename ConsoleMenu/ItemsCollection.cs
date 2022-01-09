@@ -5,10 +5,10 @@ namespace ConsoleTools;
 
 internal sealed class ItemsCollection
 {
-  private readonly List<MenuItem> _menuItems = new List<MenuItem>();
-  private readonly MenuConfig _config = new MenuConfig();
-  private int? _selectedIndex;
-  private string? _selectedName;
+  private readonly List<MenuItem> menuItems = new List<MenuItem>();
+  private readonly MenuConfig config = new MenuConfig();
+  private int? selectedIndex;
+  private string? selectedName;
   private int currentItemIndex;
 
   public ItemsCollection()
@@ -17,64 +17,43 @@ internal sealed class ItemsCollection
 
   public ItemsCollection(string[] args, int level)
   {
-    SetSelectedItems(args, level);
+    this.SetSelectedItems(args, level);
   }
 
-  public List<MenuItem> Items => _menuItems;
+  public List<MenuItem> Items => this.menuItems;
 
   public MenuItem CurrentItem
   {
-    get => _menuItems[currentItemIndex];
-    set => _menuItems[currentItemIndex] = value;
+    get => this.menuItems[this.currentItemIndex];
+    set => this.menuItems[this.currentItemIndex] = value;
   }
 
   public void Add(string name, Action action)
   {
-    _menuItems.Add(new MenuItem(name, action, _menuItems.Count));
+    this.menuItems.Add(new MenuItem(name, action, this.menuItems.Count));
   }
 
   public void ResetCurrentIndex()
   {
-    this._selectedIndex = 0;
+    this.selectedIndex = 0;
   }
 
   public void SetSelectedItems(string[] args, int level)
   {
-    var arg = Array.Find(args, a => a.StartsWith(_config.ArgsPreselectedItemsKey));
-    SetSelectedItems(level, _config.ArgsPreselectedItemsKey, ref arg);
-  }
-
-  private void SetSelectedItems(int level, string paramKey, ref string? arg)
-  {
-    if (arg == null)
-    {
-      return;
-    }
-
-    arg = arg.Replace(paramKey, string.Empty).Trim();
-    var items = arg.SplitItems(_config.ArgsPreselectedItemsValueSeparator, '\'');
-    if (level < items.Count)
-    {
-      var item = items[level].Trim('\'');
-      if (int.TryParse(item, out var selectedIndex))
-      {
-        _selectedIndex = selectedIndex;
-        return;
-      }
-      _selectedName = item;
-    }
+    var arg = Array.Find(args, a => a.StartsWith(this.config.ArgsPreselectedItemsKey));
+    this.SetSelectedItems(level, this.config.ArgsPreselectedItemsKey, ref arg);
   }
 
   public MenuItem? GetSeletedItem()
   {
-    if (_selectedIndex.HasValue && _selectedIndex.Value < _menuItems.Count)
+    if (this.selectedIndex < this.menuItems.Count)
     {
-      return _menuItems[_selectedIndex.Value];
+      return this.menuItems[this.selectedIndex.Value];
     }
 
-    if (_selectedName != null)
+    if (this.selectedName != null)
     {
-      return _menuItems.Find(item => item.Name == _selectedName);
+      return this.menuItems.Find(item => item.Name == this.selectedName);
     }
 
     return null;
@@ -82,7 +61,7 @@ internal sealed class ItemsCollection
 
   public void SelectClosestVisibleItem(VisibilityManager visibility)
   {
-    currentItemIndex = visibility.IndexOfClosestVisibleItem(currentItemIndex);
+    this.currentItemIndex = visibility.IndexOfClosestVisibleItem(this.currentItemIndex);
   }
 
   public void SelectNextVisibleItem(VisibilityManager visibility)
@@ -97,16 +76,38 @@ internal sealed class ItemsCollection
 
   public bool CanSelect(char ch)
   {
-    return ch >= '0' && (ch - '0') < _menuItems.Count; // is in range 0.._menuItems.Count
+    return ch >= '0' && (ch - '0') < this.menuItems.Count; // is in range 0.._menuItems.Count
   }
 
   public void Select(char ch)
   {
-    currentItemIndex = ch - '0';
+    this.currentItemIndex = ch - '0';
   }
 
   internal bool IsSelected(MenuItem menuItem)
   {
-    return currentItemIndex == menuItem.Index;
+    return this.currentItemIndex == menuItem.Index;
+  }
+
+  private void SetSelectedItems(int level, string paramKey, ref string? arg)
+  {
+    if (arg == null)
+    {
+      return;
+    }
+
+    arg = arg.Replace(paramKey, string.Empty).Trim();
+    var items = arg.SplitItems(this.config.ArgsPreselectedItemsValueSeparator, '\'');
+    if (level < items.Count)
+    {
+      var item = items[level].Trim('\'');
+      if (int.TryParse(item, out var selectedIndex))
+      {
+        this.selectedIndex = selectedIndex;
+        return;
+      }
+
+      this.selectedName = item;
+    }
   }
 }

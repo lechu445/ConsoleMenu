@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("ConsoleMenuTests")]
+
 namespace ConsoleTools;
 
 public class ConsoleMenu
 {
-  internal IConsole console = new SystemConsole();
-  private readonly MenuConfig _config = new MenuConfig();
+  internal IConsole Console = new SystemConsole();
+  private readonly MenuConfig config = new MenuConfig();
   private readonly ItemsCollection menuItems;
   private readonly CloseTrigger closeTrigger;
+  private ConsoleMenu? parent = null;
 
   /// <summary>
   /// Creates ConsoleMenu instance.
@@ -43,20 +45,18 @@ public class ConsoleMenu
   }
 
   /// <summary>
-  /// Menu items that can be modified.
+  /// Gets menu items that can be modified.
   /// </summary>
-  public IReadOnlyList<MenuItem> Items => menuItems.Items;
+  public IReadOnlyList<MenuItem> Items => this.menuItems.Items;
 
   /// <summary>
-  /// Selected menu item that can be modified.
+  /// Gets or sets selected menu item that can be modified.
   /// </summary>
   public MenuItem CurrentItem
   {
-    get => menuItems.CurrentItem;
-    set => menuItems.CurrentItem = value;
+    get => this.menuItems.CurrentItem;
+    set => this.menuItems.CurrentItem = value;
   }
-
-  private ConsoleMenu? Parent = null;
 
   private IReadOnlyList<string> Titles
   {
@@ -66,13 +66,19 @@ public class ConsoleMenu
       List<string> titles = new List<string>();
       while (current != null)
       {
-        titles.Add(current._config.Title ?? "");
-        current = current.Parent;
+        titles.Add(current.config.Title ?? "");
+        current = current.parent;
       }
+
       titles.Reverse();
       return titles;
     }
   }
+
+  /// <summary>
+  /// Don't run this method directly. Just pass a reference to this method.
+  /// </summary>
+  public static void Close() => throw new InvalidOperationException("Don't run this method directly. Just pass a reference to this method.");
 
   /// <summary>
   /// Close the menu before or after a menu action was triggered.
@@ -81,8 +87,8 @@ public class ConsoleMenu
   {
     this.closeTrigger.SetOn();
   }
+
   /// <summary>
-  /// 
   /// </summary>
   /// <param name="name"></param>
   /// <param name="action"></param>
@@ -101,15 +107,14 @@ public class ConsoleMenu
 
     if (action.Target is ConsoleMenu child && action == child.Show)
     {
-      child.Parent = this;
+      child.parent = this;
     }
 
-    menuItems.Add(name, action);
+    this.menuItems.Add(name, action);
     return this;
   }
 
   /// <summary>
-  /// 
   /// </summary>
   /// <param name="name"></param>
   /// <param name="action"></param>
@@ -126,12 +131,11 @@ public class ConsoleMenu
       throw new ArgumentNullException(nameof(action));
     }
 
-    menuItems.Add(name, () => action(this));
+    this.menuItems.Add(name, () => action(this));
     return this;
   }
 
   /// <summary>
-  /// 
   /// </summary>
   /// <param name="menuItems"></param>
   /// <returns></returns>
@@ -144,14 +148,13 @@ public class ConsoleMenu
 
     foreach (var item in menuItems)
     {
-      Add(item.Item1, item.Item2);
+      this.Add(item.Item1, item.Item2);
     }
 
     return this;
   }
 
   /// <summary>
-  /// 
   /// </summary>
   /// <param name="configure"></param>
   /// <returns></returns>
@@ -162,25 +165,19 @@ public class ConsoleMenu
       throw new ArgumentNullException(nameof(configure));
     }
 
-    configure?.Invoke(_config);
+    configure?.Invoke(this.config);
     return this;
   }
 
   /// <summary>
-  /// Don't run this method directly. Just pass a reference to this method.
-  /// </summary>
-  public static void Close() => throw new InvalidOperationException("Don't run this method directly. Just pass a reference to this method.");
-
-  /// <summary>
-  /// 
   /// </summary>
   public void Show()
   {
     new ConsoleMenuDisplay(
         this.menuItems,
-        this.console,
+        this.Console,
         new List<string>(this.Titles),
-        this._config,
+        this.config,
         this.closeTrigger).Show();
   }
 }

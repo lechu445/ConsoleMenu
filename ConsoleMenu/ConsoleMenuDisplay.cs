@@ -9,7 +9,7 @@ internal sealed class ConsoleMenuDisplay
   private readonly IConsole console;
   private readonly ItemsCollection menuItems;
   private readonly List<string> titles;
-  private readonly MenuConfig _config;
+  private readonly MenuConfig config;
   private readonly VisibilityManager visibility;
   private readonly CloseTrigger closeTrigger;
   private readonly string noSelectorLine;
@@ -24,15 +24,15 @@ internal sealed class ConsoleMenuDisplay
     this.menuItems = menuItems;
     this.console = console;
     this.titles = titles;
-    this._config = config;
+    this.config = config;
     this.visibility = new VisibilityManager(menuItems.Items.Count);
     this.closeTrigger = closeTrigger;
-    this.noSelectorLine = new string(' ', _config.Selector.Length);
+    this.noSelectorLine = new string(' ', this.config.Selector.Length);
   }
 
   public void Show()
   {
-    var selectedItem = menuItems.GetSeletedItem();
+    var selectedItem = this.menuItems.GetSeletedItem();
     if (selectedItem != null)
     {
       selectedItem.Action.Invoke();
@@ -40,7 +40,7 @@ internal sealed class ConsoleMenuDisplay
     }
 
     ConsoleKeyInfo key;
-    menuItems.ResetCurrentIndex();
+    this.menuItems.ResetCurrentIndex();
     var currentForegroundColor = this.console.ForegroundColor;
     var currentBackgroundColor = this.console.BackgroundColor;
     bool breakIteration = false;
@@ -50,32 +50,32 @@ internal sealed class ConsoleMenuDisplay
     {
       do
       {
-        if (_config.ClearConsole)
+        if (this.config.ClearConsole)
         {
           this.console.Clear();
         }
 
-        if (_config.EnableBreadcrumb)
+        if (this.config.EnableBreadcrumb)
         {
-          _config.WriteBreadcrumbAction(this.titles);
+          this.config.WriteBreadcrumbAction(this.titles);
         }
 
-        if (_config.EnableWriteTitle)
+        if (this.config.EnableWriteTitle)
         {
-          _config.WriteTitleAction(_config.Title);
+          this.config.WriteTitleAction(this.config.Title);
         }
 
-        _config.WriteHeaderAction();
+        this.config.WriteHeaderAction();
 
-        foreach (var menuItem in menuItems.Items)
+        foreach (var menuItem in this.menuItems.Items)
         {
-          if (_config.EnableFilter && !visibility.IsVisibleAt(menuItem.Index))
+          if (this.config.EnableFilter && !this.visibility.IsVisibleAt(menuItem.Index))
           {
-            menuItems.SelectClosestVisibleItem(visibility);
+            this.menuItems.SelectClosestVisibleItem(this.visibility);
           }
           else
           {
-            WriteLineWithItem(menuItem);
+            this.WriteLineWithItem(menuItem);
           }
         }
 
@@ -85,9 +85,9 @@ internal sealed class ConsoleMenuDisplay
           break;
         }
 
-        if (_config.EnableFilter)
+        if (this.config.EnableFilter)
         {
-          this.console.Write(_config.FilterPrompt + filter);
+          this.console.Write(this.config.FilterPrompt + filter);
         }
 
 readKey:
@@ -95,20 +95,20 @@ readKey:
 
         if (key.Key == ConsoleKey.DownArrow)
         {
-          menuItems.SelectNextVisibleItem(visibility);
+          this.menuItems.SelectNextVisibleItem(this.visibility);
         }
         else if (key.Key == ConsoleKey.UpArrow)
         {
-          menuItems.SelectPreviousVisibleItem(visibility);
+          this.menuItems.SelectPreviousVisibleItem(this.visibility);
         }
-        else if (menuItems.CanSelect(key.KeyChar))
+        else if (this.menuItems.CanSelect(key.KeyChar))
         {
-          menuItems.Select(key.KeyChar);
+          this.menuItems.Select(key.KeyChar);
           breakIteration = true;
         }
         else if (key.Key != ConsoleKey.Enter)
         {
-          if (_config.EnableFilter)
+          if (this.config.EnableFilter)
           {
             if (key.Key == ConsoleKey.Backspace)
             {
@@ -124,19 +124,20 @@ readKey:
 
             var filterString = filter.ToString();
 
-            visibility.SetVisibleWithPredicate(menuItems.Items, (item) => item.Name.Contains(filterString, StringComparison.OrdinalIgnoreCase));
+            this.visibility.SetVisibleWithPredicate(this.menuItems.Items, (item) => item.Name.Contains(filterString, StringComparison.OrdinalIgnoreCase));
           }
           else
           {
             goto readKey;
           }
         }
-      } while (key.Key != ConsoleKey.Enter);
+      }
+      while (key.Key != ConsoleKey.Enter);
 
       this.console.WriteLine();
       this.console.ForegroundColor = currentForegroundColor;
       this.console.BackgroundColor = currentBackgroundColor;
-      var action = menuItems.CurrentItem.Action;
+      var action = this.menuItems.CurrentItem.Action;
       if (action == ConsoleMenu.Close)
       {
         return;
@@ -155,22 +156,22 @@ readKey:
 
   private void WriteLineWithItem(MenuItem menuItem)
   {
-    if (menuItems.IsSelected(menuItem))
+    if (this.menuItems.IsSelected(menuItem))
     {
-      this.console.BackgroundColor = _config.SelectedItemBackgroundColor;
-      this.console.ForegroundColor = _config.SelectedItemForegroundColor;
-      this.console.Write(_config.Selector);
-      _config.WriteItemAction(menuItem);
+      this.console.BackgroundColor = this.config.SelectedItemBackgroundColor;
+      this.console.ForegroundColor = this.config.SelectedItemForegroundColor;
+      this.console.Write(this.config.Selector);
+      this.config.WriteItemAction(menuItem);
       this.console.WriteLine();
-      this.console.BackgroundColor = _config.ItemBackgroundColor;
-      this.console.ForegroundColor = _config.ItemForegroundColor;
+      this.console.BackgroundColor = this.config.ItemBackgroundColor;
+      this.console.ForegroundColor = this.config.ItemForegroundColor;
     }
     else
     {
-      this.console.BackgroundColor = _config.ItemBackgroundColor;
-      this.console.ForegroundColor = _config.ItemForegroundColor;
+      this.console.BackgroundColor = this.config.ItemBackgroundColor;
+      this.console.ForegroundColor = this.config.ItemForegroundColor;
       this.console.Write(this.noSelectorLine);
-      _config.WriteItemAction(menuItem);
+      this.config.WriteItemAction(menuItem);
       this.console.WriteLine();
     }
   }

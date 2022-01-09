@@ -1,0 +1,38 @@
+﻿ConsoleTools.ConsoleMenu
+ConsoleTools.ConsoleMenu.Add(string? name, System.Action? action) -> ConsoleTools.ConsoleMenu!
+ConsoleTools.ConsoleMenu.Add(string? name, System.Action<ConsoleTools.ConsoleMenu!>? action) -> ConsoleTools.ConsoleMenu!
+ConsoleTools.ConsoleMenu.AddRange(System.Collections.Generic.IEnumerable<System.Tuple<string!, System.Action!>!>? menuItems) -> ConsoleTools.ConsoleMenu!
+ConsoleTools.ConsoleMenu.CloseMenu() -> void
+ConsoleTools.ConsoleMenu.Configure(System.Action<ConsoleTools.MenuConfig!>? configure) -> ConsoleTools.ConsoleMenu!
+ConsoleTools.ConsoleMenu.ConsoleMenu() -> void
+ConsoleTools.ConsoleMenu.ConsoleMenu(string![]! args, int level) -> void
+ConsoleTools.ConsoleMenu.CurrentItem.get -> ConsoleTools.MenuItem!
+ConsoleTools.ConsoleMenu.CurrentItem.set -> void
+ConsoleTools.ConsoleMenu.Items.get -> System.Collections.Generic.IReadOnlyList<ConsoleTools.MenuItem!>!
+ConsoleTools.ConsoleMenu.Show() -> void
+ConsoleTools.MenuConfig
+ConsoleTools.MenuConfig.ArgsPreselectedItemsKey -> string!
+ConsoleTools.MenuConfig.ArgsPreselectedItemsValueSeparator -> char
+ConsoleTools.MenuConfig.ClearConsole -> bool
+ConsoleTools.MenuConfig.EnableBreadcrumb -> bool
+ConsoleTools.MenuConfig.EnableFilter -> bool
+ConsoleTools.MenuConfig.EnableWriteTitle -> bool
+ConsoleTools.MenuConfig.FilterPrompt -> string!
+ConsoleTools.MenuConfig.ItemBackgroundColor -> System.ConsoleColor
+ConsoleTools.MenuConfig.ItemForegroundColor -> System.ConsoleColor
+ConsoleTools.MenuConfig.MenuConfig() -> void
+ConsoleTools.MenuConfig.SelectedItemBackgroundColor -> System.ConsoleColor
+ConsoleTools.MenuConfig.SelectedItemForegroundColor -> System.ConsoleColor
+ConsoleTools.MenuConfig.Selector -> string!
+ConsoleTools.MenuConfig.Title -> string!
+ConsoleTools.MenuConfig.WriteBreadcrumbAction -> System.Action<System.Collections.Generic.IReadOnlyList<string!>!>!
+ConsoleTools.MenuConfig.WriteHeaderAction -> System.Action!
+ConsoleTools.MenuConfig.WriteItemAction -> System.Action<ConsoleTools.MenuItem!>!
+ConsoleTools.MenuConfig.WriteTitleAction -> System.Action<string!>!
+ConsoleTools.MenuItem
+ConsoleTools.MenuItem.Action.get -> System.Action!
+ConsoleTools.MenuItem.Action.set -> void
+ConsoleTools.MenuItem.Index.get -> int
+ConsoleTools.MenuItem.Name.get -> string!
+ConsoleTools.MenuItem.Name.set -> void
+static ConsoleTools.ConsoleMenu.Close() -> void
