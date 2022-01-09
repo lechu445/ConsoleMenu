@@ -2,7 +2,7 @@
 
 namespace ConsoleTools;
 
-public class MenuItem
+public sealed class MenuItem
 {
   public string Name { get; set; }
   public Action Action { get; set; }
