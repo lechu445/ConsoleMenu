@@ -26,6 +26,7 @@ namespace ConsoleMenuSampleApp
         .Add("Sub_Three", () => SomeAction("Sub_Three"))
         .Add("Sub_Four", () => SomeAction("Sub_Four"))
         .Add("Sub_Close", ConsoleMenu.Close)
+        .Add("Sub_Action then Close", (thisMenu) => { SomeAction("Closing action..."); thisMenu.CloseMenu(); })
         .Add("Sub_Exit", () => Environment.Exit(0))
         .Configure(config =>
         {

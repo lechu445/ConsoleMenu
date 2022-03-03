@@ -140,6 +140,7 @@ readKey:
       var action = this.menuItems.CurrentItem.Action;
       if (action == ConsoleMenu.Close)
       {
+        this.menuItems.UnsetSelectedIndex();
         return;
       }
       else
@@ -147,6 +148,7 @@ readKey:
         action();
         if (this.closeTrigger.IsOn())
         {
+          this.menuItems.UnsetSelectedIndex();
           this.closeTrigger.SetOff();
           return;
         }

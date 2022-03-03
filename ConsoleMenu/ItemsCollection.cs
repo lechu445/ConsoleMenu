@@ -84,6 +84,12 @@ internal sealed class ItemsCollection
     this.currentItemIndex = ch - '0';
   }
 
+  public void UnsetSelectedIndex()
+  {
+    this.selectedIndex = null;
+    this.selectedName = null;
+  }
+
   internal bool IsSelected(MenuItem menuItem)
   {
     return this.currentItemIndex == menuItem.Index;
