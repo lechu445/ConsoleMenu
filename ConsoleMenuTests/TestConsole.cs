@@ -27,7 +27,10 @@ namespace ConsoleMenuTests
     {
       this.output = new MemoryStream();
       this.outputWriter = new StreamWriter(output) { AutoFlush = true };
+      this.Title = "";
     }
+
+    public event ConsoleCancelEventHandler? CancelKeyPress;
 
     public bool IsOutputRedirected => throw new NotImplementedException();
 
@@ -71,9 +74,8 @@ namespace ConsoleMenuTests
     public int WindowHeight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     public int WindowWidth { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     public int WindowLeft { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public ConsoleColor BackgroundColor { get; set; }
 
-    public event ConsoleCancelEventHandler CancelKeyPress;
+    public ConsoleColor BackgroundColor { get; set; }
 
     public void Beep()
     {
@@ -274,7 +276,7 @@ namespace ConsoleMenuTests
       => this.Write(value.ToString());
 
     public void Write(object value)
-      => this.Write(value.ToString());
+      => this.Write(value.ToString()!);
 
     public void WriteLine()
       => this.outputWriter.WriteLine();
@@ -301,7 +303,7 @@ namespace ConsoleMenuTests
       => this.WriteLine(value.ToString());
 
     public void WriteLine(object value)
-      => this.WriteLine(value.ToString());
+      => this.WriteLine(value.ToString()!);
 
     public void WriteLine(float value)
       => this.WriteLine(value.ToString());

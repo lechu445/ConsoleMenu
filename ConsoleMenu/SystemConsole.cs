@@ -6,6 +6,8 @@ namespace ConsoleTools;
 
 internal sealed class SystemConsole : IConsole
 {
+  public event ConsoleCancelEventHandler? CancelKeyPress;
+
   public bool IsOutputRedirected => Console.IsOutputRedirected;
 
   public int BufferHeight { get => Console.BufferHeight; set => Console.BufferHeight = value; }
@@ -60,8 +62,6 @@ internal sealed class SystemConsole : IConsole
 
   public ConsoleColor BackgroundColor { get => Console.BackgroundColor; set => Console.BackgroundColor = value; }
 
-  public event ConsoleCancelEventHandler CancelKeyPress;
-
   public void Beep()
   {
     throw new NotImplementedException();
@@ -108,7 +108,7 @@ internal sealed class SystemConsole : IConsole
   public ConsoleKeyInfo ReadKey()
     => Console.ReadKey();
 
-  public string ReadLine()
+  public string? ReadLine()
     => Console.ReadLine();
 
   public void ResetColor()

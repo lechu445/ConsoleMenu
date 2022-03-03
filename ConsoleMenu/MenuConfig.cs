@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace ConsoleTools;
 
+/// <summary>
+/// Menu configuration.
+/// </summary>
 public class MenuConfig
 {
   /// <summary>default: Console.ForegroundColor</summary>

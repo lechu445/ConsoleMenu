@@ -6,6 +6,9 @@ using System.Runtime.CompilerServices;
 
 namespace ConsoleTools;
 
+/// <summary>
+/// A simple, highly customizable, DOS-like console menu.
+/// </summary>
 public class ConsoleMenu
 {
   internal IConsole Console = new SystemConsole();
@@ -15,7 +18,7 @@ public class ConsoleMenu
   private ConsoleMenu? parent = null;
 
   /// <summary>
-  /// Creates ConsoleMenu instance.
+  /// Initializes a new instance of the <see cref="ConsoleMenu"/> class.
   /// </summary>
   public ConsoleMenu()
   {
@@ -24,7 +27,8 @@ public class ConsoleMenu
   }
 
   /// <summary>
-  /// Creates ConsoleMenu instance with possibility to pre-select items via console parameter.
+  /// Initializes a new instance of the <see cref="ConsoleMenu"/> class
+  /// with possibility to pre-select items via console parameter.
   /// </summary>
   /// <param name="args">args collection from Main.</param>
   /// <param name="level">Level of whole menu.</param>
@@ -89,11 +93,12 @@ public class ConsoleMenu
   }
 
   /// <summary>
+  /// Adds a menu item into this instance.
   /// </summary>
-  /// <param name="name"></param>
-  /// <param name="action"></param>
-  /// <returns></returns>
-  public ConsoleMenu Add(string? name, Action? action)
+  /// <param name="name">Name of menu item.</param>
+  /// <param name="action">Action to call when menu item is chosen.</param>
+  /// <returns>This instance with added menu item.</returns>
+  public ConsoleMenu Add(string name, Action action)
   {
     if (name == null)
     {
@@ -115,11 +120,12 @@ public class ConsoleMenu
   }
 
   /// <summary>
+  /// Adds a menu item into this instance.
   /// </summary>
-  /// <param name="name"></param>
-  /// <param name="action"></param>
-  /// <returns></returns>
-  public ConsoleMenu Add(string? name, Action<ConsoleMenu>? action)
+  /// <param name="name">Name of menu item.</param>
+  /// <param name="action">Action to call when menu item is chosen.</param>
+  /// <returns>This instance with added menu item.</returns>
+  public ConsoleMenu Add(string name, Action<ConsoleMenu> action)
   {
     if (name == null)
     {
@@ -136,10 +142,11 @@ public class ConsoleMenu
   }
 
   /// <summary>
+  /// Adds range of menu items into this instance.
   /// </summary>
-  /// <param name="menuItems"></param>
-  /// <returns></returns>
-  public ConsoleMenu AddRange(IEnumerable<Tuple<string, Action>>? menuItems)
+  /// <param name="menuItems">Menu items to add.</param>
+  /// <returns>This instance with added menu items.</returns>
+  public ConsoleMenu AddRange(IEnumerable<Tuple<string, Action>> menuItems)
   {
     if (menuItems is null)
     {
@@ -155,21 +162,24 @@ public class ConsoleMenu
   }
 
   /// <summary>
+  /// Applies an configuration action on this instance.
   /// </summary>
-  /// <param name="configure"></param>
-  /// <returns></returns>
-  public ConsoleMenu Configure(Action<MenuConfig>? configure)
+  /// <param name="configure">Configuration action.</param>
+  /// <returns>An configured instance.</returns>
+  /// <exception cref="ArgumentNullException"><paramref name="configure"/> is null.</exception>
+  public ConsoleMenu Configure(Action<MenuConfig> configure)
   {
     if (configure is null)
     {
       throw new ArgumentNullException(nameof(configure));
     }
 
-    configure?.Invoke(this.config);
+    configure.Invoke(this.config);
     return this;
   }
 
   /// <summary>
+  /// Displays the menu in console.
   /// </summary>
   public void Show()
   {

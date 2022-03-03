@@ -6,6 +6,8 @@ namespace ConsoleTools;
 
 internal interface IConsole
 {
+  event ConsoleCancelEventHandler? CancelKeyPress;
+
   bool IsOutputRedirected { get; }
 
   int BufferHeight { get; set; }
@@ -60,8 +62,6 @@ internal interface IConsole
 
   ConsoleColor BackgroundColor { get; set; }
 
-  event ConsoleCancelEventHandler CancelKeyPress;
-
   void Beep();
 
   void Beep(int frequency, int duration);
@@ -84,7 +84,7 @@ internal interface IConsole
 
   ConsoleKeyInfo ReadKey();
 
-  string ReadLine();
+  string? ReadLine();
 
   void ResetColor();
 
