@@ -8,6 +8,7 @@ ConsoleTools.ConsoleMenu.ConsoleMenu() -> void
 ConsoleTools.ConsoleMenu.ConsoleMenu(string![]! args, int level) -> void
 ConsoleTools.ConsoleMenu.CurrentItem.get -> ConsoleTools.MenuItem!
 ConsoleTools.ConsoleMenu.CurrentItem.set -> void
+ConsoleTools.ConsoleMenu.GetEnumerator() -> System.Collections.IEnumerator!
 ConsoleTools.ConsoleMenu.Items.get -> System.Collections.Generic.IReadOnlyList<ConsoleTools.MenuItem!>!
 ConsoleTools.ConsoleMenu.Show() -> void
 ConsoleTools.MenuConfig
