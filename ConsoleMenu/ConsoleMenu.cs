@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -9,7 +10,7 @@ namespace ConsoleTools;
 /// <summary>
 /// A simple, highly customizable, DOS-like console menu.
 /// </summary>
-public class ConsoleMenu
+public class ConsoleMenu : IEnumerable
 {
   internal IConsole Console = new SystemConsole();
   private readonly MenuConfig config = new MenuConfig();
@@ -190,4 +191,11 @@ public class ConsoleMenu
         this.config,
         this.closeTrigger).Show();
   }
+
+  /// <summary>
+  /// Returns an enumeration of the current menu items.
+  /// See <see cref="Items"/>.
+  /// </summary>
+  /// <returns>An enumeration of the current menu items.</returns>
+  public IEnumerator GetEnumerator() => this.Items.GetEnumerator();
 }
