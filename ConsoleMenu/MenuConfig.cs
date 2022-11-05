@@ -9,6 +9,34 @@ namespace ConsoleTools;
 /// </summary>
 public class MenuConfig
 {
+  /// <summary>
+  /// Initializes a new instance of the <see cref="MenuConfig"/> class.
+  /// </summary>
+  public MenuConfig()
+  {
+  }
+
+  internal MenuConfig(MenuConfig config)
+  {
+    this.ArgsPreselectedItemsKey = config.ArgsPreselectedItemsKey;
+    this.ArgsPreselectedItemsValueSeparator = config.ArgsPreselectedItemsValueSeparator;
+    this.ClearConsole = config.ClearConsole;
+    this.EnableBreadcrumb = config.EnableBreadcrumb;
+    this.EnableFilter = config.EnableFilter;
+    this.EnableWriteTitle = config.EnableWriteTitle;
+    this.FilterPrompt = config.FilterPrompt;
+    this.ItemBackgroundColor = config.ItemBackgroundColor;
+    this.ItemForegroundColor = config.ItemForegroundColor;
+    this.SelectedItemBackgroundColor = config.SelectedItemBackgroundColor;
+    this.SelectedItemForegroundColor = config.SelectedItemForegroundColor;
+    this.Selector = config.Selector;
+    this.Title = config.Title;
+    this.WriteBreadcrumbAction = config.WriteBreadcrumbAction;
+    this.WriteHeaderAction = config.WriteHeaderAction;
+    this.WriteItemAction = config.WriteItemAction;
+    this.WriteTitleAction = config.WriteTitleAction;
+  }
+
   /// <summary>default: Console.ForegroundColor</summary>
   public ConsoleColor SelectedItemBackgroundColor = Console.ForegroundColor;
 

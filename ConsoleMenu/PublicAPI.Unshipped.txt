@@ -3,6 +3,7 @@ ConsoleTools.ConsoleMenu.Add(string! name, System.Action! action) -> ConsoleTool
 ConsoleTools.ConsoleMenu.Add(string! name, System.Action<ConsoleTools.ConsoleMenu!>! action) -> ConsoleTools.ConsoleMenu!
 ConsoleTools.ConsoleMenu.AddRange(System.Collections.Generic.IEnumerable<System.Tuple<string!, System.Action!>!>! menuItems) -> ConsoleTools.ConsoleMenu!
 ConsoleTools.ConsoleMenu.CloseMenu() -> void
+ConsoleTools.ConsoleMenu.Configure(ConsoleTools.MenuConfig! config) -> ConsoleTools.ConsoleMenu!
 ConsoleTools.ConsoleMenu.Configure(System.Action<ConsoleTools.MenuConfig!>! configure) -> ConsoleTools.ConsoleMenu!
 ConsoleTools.ConsoleMenu.ConsoleMenu() -> void
 ConsoleTools.ConsoleMenu.ConsoleMenu(string![]! args, int level) -> void

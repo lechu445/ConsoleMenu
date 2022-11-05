@@ -13,9 +13,9 @@ namespace ConsoleTools;
 public class ConsoleMenu : IEnumerable
 {
   internal IConsole Console = new SystemConsole();
-  private readonly MenuConfig config = new MenuConfig();
   private readonly ItemsCollection menuItems;
   private readonly CloseTrigger closeTrigger;
+  private MenuConfig config = new MenuConfig();
   private ConsoleMenu? parent = null;
 
   /// <summary>
@@ -176,6 +176,23 @@ public class ConsoleMenu : IEnumerable
     }
 
     configure.Invoke(this.config);
+    return this;
+  }
+
+  /// <summary>
+  /// Applies an configuration action on this instance.
+  /// </summary>
+  /// <param name="config">Configuration to apply.</param>
+  /// <returns>An configured instance.</returns>
+  /// <exception cref="ArgumentNullException"><paramref name="config"/> is null.</exception>
+  public ConsoleMenu Configure(MenuConfig config)
+  {
+    if (config is null)
+    {
+      throw new ArgumentNullException(nameof(config));
+    }
+
+    this.config = new MenuConfig(config);
     return this;
   }
 
