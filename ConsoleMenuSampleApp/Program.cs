@@ -7,18 +7,23 @@ namespace ConsoleMenuSampleApp
   {
     private static void Main(string[] args)
     {
+      var commonConfig = new MenuConfig
+      {
+        Selector = "--> ",
+        EnableFilter = true,
+        EnableBreadcrumb = true,
+        WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" / ", titles)),
+      };
+
       var subMenu1 = new ConsoleMenu(args, level: 2)
         .Add("One", () => SomeAction("One1"))
-          .Add("Sub_Close", ConsoleMenu.Close)
-          .Add("Sub_Exit", () => Environment.Exit(0))
-          .Configure(config =>
-          {
-            config.Selector = "--> ";
-            config.EnableFilter = true;
-            config.Title = "Submenu1";
-            config.EnableBreadcrumb = true;
-            config.WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" / ", titles));
-          });
+        .Add("Sub_Close", ConsoleMenu.Close)
+        .Add("Sub_Exit", () => Environment.Exit(0))
+        .Configure(commonConfig)
+        .Configure(config =>
+        {
+          config.Title = "Submenu1";
+        });
 
       var subMenu = new ConsoleMenu(args, level: 1)
         .Add("Sub_One", () => SomeAction("Sub_One"))
@@ -28,13 +33,10 @@ namespace ConsoleMenuSampleApp
         .Add("Sub_Close", ConsoleMenu.Close)
         .Add("Sub_Action then Close", (thisMenu) => { SomeAction("Closing action..."); thisMenu.CloseMenu(); })
         .Add("Sub_Exit", () => Environment.Exit(0))
+        .Configure(commonConfig)
         .Configure(config =>
         {
-          config.Selector = "--> ";
-          config.EnableFilter = true;
           config.Title = "Submenu";
-          config.EnableBreadcrumb = true;
-          config.WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" / ", titles));
         });
 
       var menu = new ConsoleMenu(args, level: 0)
@@ -46,10 +48,9 @@ namespace ConsoleMenuSampleApp
         .Add("Close", ConsoleMenu.Close)
         .Add("Action then Close", (thisMenu) => { SomeAction("Closing action..."); thisMenu.CloseMenu(); })
         .Add("Exit", () => Environment.Exit(0))
+        .Configure(commonConfig)
         .Configure(config =>
         {
-          config.Selector = "--> ";
-          config.EnableFilter = true;
           config.Title = "Main menu";
           config.EnableWriteTitle = true;
           config.EnableBreadcrumb = true;

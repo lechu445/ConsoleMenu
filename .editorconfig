@@ -68,7 +68,7 @@ dotnet_naming_symbols.constant_fields.applicable_accessibilities  = *
 dotnet_naming_symbols.constant_fields.required_modifiers          = const
 tab_width= 2
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
-end_of_line = crlf
+end_of_line = lf
 dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 ###############################
 # C# Coding Conventions       #
@@ -146,6 +146,8 @@ dotnet_diagnostic.SA1122.severity = none
 
 # SA1405: Debug.Assert should provide message text
 dotnet_diagnostic.SA1405.severity = none
+csharp_style_prefer_method_group_conversion = true:silent
+csharp_style_prefer_top_level_statements = true:silent
 
 [*.vb]
 # Modifier preferences
