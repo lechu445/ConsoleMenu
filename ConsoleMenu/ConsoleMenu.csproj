@@ -6,11 +6,10 @@
     <Authors>lechu445</Authors>
     <Product>ConsoleMenu-simple</Product>
     <Description>A simple, highly customizable, DOS-like console menu</Description>
-    <PackageReleaseNotes>- added collection initializer
-- added ConsoleMenu.Configure(MenuConfig config)</PackageReleaseNotes>
+    <PackageReleaseNotes>- added async API</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/lechu445/ConsoleMenu</PackageProjectUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <Version>2.5.0</Version>
+    <Version>2.6.0</Version>
     <RepositoryUrl>https://github.com/lechu445/ConsoleMenu</RepositoryUrl>
     <PackageTags>console, menu, simple</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
@@ -38,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.3">
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

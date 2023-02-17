@@ -1,7 +1,10 @@
 ﻿ConsoleTools.ConsoleMenu
 ConsoleTools.ConsoleMenu.Add(string! name, System.Action! action) -> ConsoleTools.ConsoleMenu!
 ConsoleTools.ConsoleMenu.Add(string! name, System.Action<ConsoleTools.ConsoleMenu!>! action) -> ConsoleTools.ConsoleMenu!
+ConsoleTools.ConsoleMenu.Add(string! name, System.Func<ConsoleTools.ConsoleMenu!, System.Threading.CancellationToken, System.Threading.Tasks.Task!>! action) -> ConsoleTools.ConsoleMenu!
+ConsoleTools.ConsoleMenu.Add(string! name, System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task!>! action) -> ConsoleTools.ConsoleMenu!
 ConsoleTools.ConsoleMenu.AddRange(System.Collections.Generic.IEnumerable<System.Tuple<string!, System.Action!>!>! menuItems) -> ConsoleTools.ConsoleMenu!
+ConsoleTools.ConsoleMenu.AddRange(System.Collections.Generic.IEnumerable<System.Tuple<string!, System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task!>!>!>! menuItems) -> ConsoleTools.ConsoleMenu!
 ConsoleTools.ConsoleMenu.CloseMenu() -> void
 ConsoleTools.ConsoleMenu.Configure(ConsoleTools.MenuConfig! config) -> ConsoleTools.ConsoleMenu!
 ConsoleTools.ConsoleMenu.Configure(System.Action<ConsoleTools.MenuConfig!>! configure) -> ConsoleTools.ConsoleMenu!
@@ -34,7 +37,9 @@ ConsoleTools.MenuConfig.WriteTitleAction -> System.Action<string!>!
 ConsoleTools.MenuItem
 ConsoleTools.MenuItem.Action.get -> System.Action!
 ConsoleTools.MenuItem.Action.set -> void
+ConsoleTools.MenuItem.AsyncAction.get -> System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task!>!
+ConsoleTools.MenuItem.AsyncAction.set -> void
 ConsoleTools.MenuItem.Index.get -> int
 ConsoleTools.MenuItem.Name.get -> string!
 ConsoleTools.MenuItem.Name.set -> void
-static ConsoleTools.ConsoleMenu.Close() -> void
+static ConsoleTools.ConsoleMenu.Close(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!

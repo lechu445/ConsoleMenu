@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ConsoleTools;
 
@@ -8,12 +10,12 @@ namespace ConsoleTools;
 /// </summary>
 public sealed class MenuItem
 {
-  internal MenuItem(string name, Action action, int index)
+  internal MenuItem(string name, Func<CancellationToken, Task> action, int index)
   {
     Debug.Assert(index >= 0);
 
     this.Name = name ?? throw new ArgumentNullException(nameof(name));
-    this.Action = action ?? throw new ArgumentNullException(nameof(action));
+    this.AsyncAction = action ?? throw new ArgumentNullException(nameof(action));
     this.Index = index;
   }
 
@@ -24,8 +26,22 @@ public sealed class MenuItem
 
   /// <summary>
   /// Gets or sets an action of the menu item that will be called when the item is called.
+  /// If you get asynchronous action, it will be converted to synchronous, so better use <see cref="AsyncAction"/> getter.
   /// </summary>
-  public Action Action { get; set; }
+  public Action Action
+  {
+    get => () => this.AsyncAction(CancellationToken.None).GetAwaiter().GetResult();
+    set => this.AsyncAction = (_) =>
+    {
+      value();
+      return Task.CompletedTask;
+    };
+  }
+
+  /// <summary>
+  /// Gets or sets an action of the menu item that will be called when the item is called.
+  /// </summary>
+  public Func<CancellationToken, Task> AsyncAction { get; set; }
 
   /// <summary>
   /// Gets an index of the menu item.

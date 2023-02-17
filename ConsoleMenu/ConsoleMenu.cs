@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 [assembly: InternalsVisibleTo("ConsoleMenuTests")]
 
@@ -68,7 +70,7 @@ public class ConsoleMenu : IEnumerable
     get
     {
       ConsoleMenu? current = this;
-      List<string> titles = new List<string>();
+      List<string> titles = new();
       while (current != null)
       {
         titles.Add(current.config.Title ?? "");
@@ -83,7 +85,10 @@ public class ConsoleMenu : IEnumerable
   /// <summary>
   /// Don't run this method directly. Just pass a reference to this method.
   /// </summary>
-  public static void Close() => throw new InvalidOperationException("Don't run this method directly. Just pass a reference to this method.");
+  /// <param name="cancellationToken">Cancellation token.</param>
+  /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+  /// <exception cref="InvalidOperationException">Thrown if this method is called directly.</exception>
+  public static Task Close(CancellationToken cancellationToken) => throw new InvalidOperationException("Don't run this method directly. Just pass a reference to this method.");
 
   /// <summary>
   /// Close the menu before or after a menu action was triggered.
@@ -94,7 +99,7 @@ public class ConsoleMenu : IEnumerable
   }
 
   /// <summary>
-  /// Adds a menu item into this instance.
+  /// Adds a menu action into this instance.
   /// </summary>
   /// <param name="name">Name of menu item.</param>
   /// <param name="action">Action to call when menu item is chosen.</param>
@@ -116,12 +121,43 @@ public class ConsoleMenu : IEnumerable
       child.parent = this;
     }
 
+    this.menuItems.Add(name, (_) =>
+    {
+      action();
+      return Task.CompletedTask;
+    });
+    return this;
+  }
+
+  /// <summary>
+  /// Adds an asynchronous menu action into this instance.
+  /// </summary>
+  /// <param name="name">Name of menu item.</param>
+  /// <param name="action">Action to call when menu item is chosen.</param>
+  /// <returns>This instance with added menu item.</returns>
+  public ConsoleMenu Add(string name, Func<CancellationToken, Task> action)
+  {
+    if (name == null)
+    {
+      throw new ArgumentNullException(nameof(name));
+    }
+
+    if (action == null)
+    {
+      throw new ArgumentNullException(nameof(action));
+    }
+
+    if (action.Target is ConsoleMenu child && action == child.ShowAsync)
+    {
+      child.parent = this;
+    }
+
     this.menuItems.Add(name, action);
     return this;
   }
 
   /// <summary>
-  /// Adds a menu item into this instance.
+  /// Adds a menu action into this instance.
   /// </summary>
   /// <param name="name">Name of menu item.</param>
   /// <param name="action">Action to call when menu item is chosen.</param>
@@ -138,16 +174,62 @@ public class ConsoleMenu : IEnumerable
       throw new ArgumentNullException(nameof(action));
     }
 
-    this.menuItems.Add(name, () => action(this));
+    this.menuItems.Add(name, (_) =>
+    {
+      action(this);
+      return Task.CompletedTask;
+    });
     return this;
   }
 
   /// <summary>
-  /// Adds range of menu items into this instance.
+  /// Adds an asynchronous menu action into this instance.
+  /// </summary>
+  /// <param name="name">Name of menu item.</param>
+  /// <param name="action">Action to call when menu item is chosen.</param>
+  /// <returns>This instance with added menu item.</returns>
+  public ConsoleMenu Add(string name, Func<ConsoleMenu, CancellationToken, Task> action)
+  {
+    if (name == null)
+    {
+      throw new ArgumentNullException(nameof(name));
+    }
+
+    if (action is null)
+    {
+      throw new ArgumentNullException(nameof(action));
+    }
+
+    this.menuItems.Add(name, (cancellationToken) => action(this, cancellationToken));
+    return this;
+  }
+
+  /// <summary>
+  /// Adds range of menu actions into this instance.
   /// </summary>
   /// <param name="menuItems">Menu items to add.</param>
   /// <returns>This instance with added menu items.</returns>
   public ConsoleMenu AddRange(IEnumerable<Tuple<string, Action>> menuItems)
+  {
+    if (menuItems is null)
+    {
+      throw new ArgumentNullException(nameof(menuItems));
+    }
+
+    foreach (var item in menuItems)
+    {
+      this.Add(item.Item1, item.Item2);
+    }
+
+    return this;
+  }
+
+  /// <summary>
+  /// Adds range of asynchronous menu actions into this instance.
+  /// </summary>
+  /// <param name="menuItems">Menu items to add.</param>
+  /// <returns>This instance with added menu items.</returns>
+  public ConsoleMenu AddRange(IEnumerable<Tuple<string, Func<CancellationToken, Task>>> menuItems)
   {
     if (menuItems is null)
     {
@@ -206,7 +288,20 @@ public class ConsoleMenu : IEnumerable
         this.Console,
         new List<string>(this.Titles),
         this.config,
-        this.closeTrigger).Show();
+        this.closeTrigger).ShowAsync(CancellationToken.None).GetAwaiter().GetResult();
+  }
+
+  /// <summary>
+  /// Displays the menu in console.
+  /// </summary>
+  public async Task ShowAsync(CancellationToken cancellationToken = default)
+  {
+    await new ConsoleMenuDisplay(
+        this.menuItems,
+        this.Console,
+        new List<string>(this.Titles),
+        this.config,
+        this.closeTrigger).ShowAsync(cancellationToken);
   }
 
   /// <summary>
