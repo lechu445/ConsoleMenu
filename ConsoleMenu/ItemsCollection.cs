@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ConsoleTools;
 
@@ -28,7 +30,7 @@ internal sealed class ItemsCollection
     set => this.menuItems[this.currentItemIndex] = value;
   }
 
-  public void Add(string name, Action action)
+  public void Add(string name, Func<CancellationToken, Task> action)
   {
     this.menuItems.Add(new MenuItem(name, action, this.menuItems.Count));
   }

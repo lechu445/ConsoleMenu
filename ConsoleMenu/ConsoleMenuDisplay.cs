@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ConsoleTools;
 
@@ -30,12 +32,12 @@ internal sealed class ConsoleMenuDisplay
     this.noSelectorLine = new string(' ', this.config.Selector.Length);
   }
 
-  public void Show()
+  public async Task ShowAsync(CancellationToken token)
   {
     var selectedItem = this.menuItems.GetSeletedItem();
     if (selectedItem != null)
     {
-      selectedItem.Action.Invoke();
+      await selectedItem.AsyncAction.Invoke(token);
       return;
     }
 
@@ -48,6 +50,7 @@ internal sealed class ConsoleMenuDisplay
 
     while (true)
     {
+      token.ThrowIfCancellationRequested();
       do
       {
         if (this.config.ClearConsole)
@@ -137,7 +140,7 @@ readKey:
       this.console.WriteLine();
       this.console.ForegroundColor = currentForegroundColor;
       this.console.BackgroundColor = currentBackgroundColor;
-      var action = this.menuItems.CurrentItem.Action;
+      var action = this.menuItems.CurrentItem.AsyncAction;
       if (action == ConsoleMenu.Close)
       {
         this.menuItems.UnsetSelectedIndex();
@@ -145,7 +148,7 @@ readKey:
       }
       else
       {
-        action();
+        await action(token).ConfigureAwait(false);
         if (this.closeTrigger.IsOn())
         {
           this.menuItems.UnsetSelectedIndex();

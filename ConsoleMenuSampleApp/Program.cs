@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using ConsoleTools;
 
 namespace ConsoleMenuSampleApp
 {
   public class Program
   {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
       var commonConfig = new MenuConfig
       {
@@ -30,6 +32,7 @@ namespace ConsoleMenuSampleApp
         .Add("Sub_Two", () => SomeAction("Sub_Two"))
         .Add("Sub_Three", () => SomeAction("Sub_Three"))
         .Add("Sub_Four", () => SomeAction("Sub_Four"))
+        .Add("Sub_Five", async (cancellationToken) => await SomeAction2(cancellationToken))
         .Add("Sub_Close", ConsoleMenu.Close)
         .Add("Sub_Action then Close", (thisMenu) => { SomeAction("Closing action..."); thisMenu.CloseMenu(); })
         .Add("Sub_Exit", () => Environment.Exit(0))
@@ -56,12 +59,22 @@ namespace ConsoleMenuSampleApp
           config.EnableBreadcrumb = true;
         });
 
-      menu.Show();
+      var token = new CancellationTokenSource(7000).Token;
+      await menu.ShowAsync(token);
     }
 
     private static void SomeAction(string text)
     {
       Console.WriteLine(text);
+      Console.WriteLine("Press any key to continue...");
+      Console.ReadKey();
+    }
+
+    private static async Task SomeAction2(CancellationToken token)
+    {
+      Console.WriteLine("start delay...");
+      await Task.Delay(2000, token);
+      Console.WriteLine("end delay");
       Console.WriteLine("Press any key to continue...");
       Console.ReadKey();
     }
