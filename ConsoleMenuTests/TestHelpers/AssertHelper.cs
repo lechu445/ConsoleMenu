@@ -12,7 +12,7 @@ namespace ConsoleMenuTests.TestHelpers
       }
       catch (Xunit.Sdk.EqualException ex)
       {
-        throw new Xunit.Sdk.AssertActualExpectedException(expected, actual, "Expected was not equal to actual", "Expected", "Actual", ex);
+        throw new Xunit.Sdk.XunitException("Expected was not equal to actual", ex);
       }
     }
   }
