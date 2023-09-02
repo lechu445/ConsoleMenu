@@ -19,6 +19,7 @@ public class ConsoleMenu : IEnumerable
   private readonly CloseTrigger closeTrigger;
   private MenuConfig config = new MenuConfig();
   private ConsoleMenu? parent = null;
+  private bool isShown = false;
 
   /// <summary>
   /// Initializes a new instance of the <see cref="ConsoleMenu"/> class.
@@ -283,12 +284,7 @@ public class ConsoleMenu : IEnumerable
   /// </summary>
   public void Show()
   {
-    new ConsoleMenuDisplay(
-        this.menuItems,
-        this.Console,
-        new List<string>(this.Titles),
-        this.config,
-        this.closeTrigger).ShowAsync(CancellationToken.None).GetAwaiter().GetResult();
+    ShowAsync(CancellationToken.None).GetAwaiter().GetResult();
   }
 
   /// <summary>
@@ -296,6 +292,13 @@ public class ConsoleMenu : IEnumerable
   /// </summary>
   public async Task ShowAsync(CancellationToken cancellationToken = default)
   {
+    if (isShown)
+    {
+      this.menuItems.UnsetSelectedIndex();
+    }
+
+    isShown = true;
+
     await new ConsoleMenuDisplay(
         this.menuItems,
         this.Console,
