@@ -12,7 +12,7 @@ namespace ConsoleMenuSampleApp
       var commonConfig = new MenuConfig
       {
         Selector = "--> ",
-        EnableFilter = true,
+        EnableFilter = false,
         EnableBreadcrumb = true,
         WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" / ", titles)),
       };
@@ -50,6 +50,9 @@ namespace ConsoleMenuSampleApp
         .Add("Change me!", (thisMenu) => thisMenu.CurrentItem.Name = "I am changed!")
         .Add("Close", ConsoleMenu.Close)
         .Add("Action then Close", (thisMenu) => { SomeAction("Closing action..."); thisMenu.CloseMenu(); })
+        .Add("Eight", () => SomeAction("Eight"))
+        .Add("Nine", () => SomeAction("Nine"))
+        .Add("Ten", () => SomeAction("Ten"))
         .Add("Exit", () => Environment.Exit(0))
         .Configure(commonConfig)
         .Configure(config =>

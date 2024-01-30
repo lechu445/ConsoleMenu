@@ -53,7 +53,21 @@ public class MenuConfig
   public Action WriteHeaderAction = () => Console.WriteLine("Pick an option:");
 
   /// <summary>default: (item) => Console.Write("[{0}] {1}", item.Index, item.Name)</summary>
-  public Action<MenuItem> WriteItemAction = item => Console.Write("[{0}] {1}", item.Index, item.Name);
+  public Action<MenuItem> WriteItemAction = item =>
+  {
+    char index;
+
+    if (item.Index >= 10)
+    {
+      index = (char)(item.Index + 55);
+    }
+    else
+    {
+      index = (char)(item.Index + 48);
+    }
+
+    Console.Write("[{0}] {1}", index, item.Name);
+  };
 
   /// <summary>default: ">> "</summary>
   public string Selector = ">> ";
