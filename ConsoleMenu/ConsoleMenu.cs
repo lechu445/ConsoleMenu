@@ -276,6 +276,7 @@ public class ConsoleMenu : IEnumerable
     }
 
     this.config = new MenuConfig(config);
+    this.menuItems.EnableAlphabet = this.config.EnableAlphabet;
     return this;
   }
 

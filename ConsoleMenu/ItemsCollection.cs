@@ -30,6 +30,8 @@ internal sealed class ItemsCollection
     set => this.menuItems[this.currentItemIndex] = value;
   }
 
+  public bool EnableAlphabet { get; set; } = false;
+
   public void Add(string name, Func<CancellationToken, Task> action)
   {
     this.menuItems.Add(new MenuItem(name, action, this.menuItems.Count));
@@ -78,12 +80,24 @@ internal sealed class ItemsCollection
 
   public bool CanSelect(char ch)
   {
-    return ch >= '0' && GetSelectedIndex(ch) < this.menuItems.Count;
+    if (this.EnableAlphabet)
+    {
+      return ch >= '0' && GetSelectedIndex(ch) < this.menuItems.Count;
+    }
+
+    return ch >= '0' && (ch - '0') < this.menuItems.Count;
   }
 
   public void Select(char ch)
   {
-    this.currentItemIndex = GetSelectedIndex(ch);
+    if (this.EnableAlphabet)
+    {
+      this.currentItemIndex = GetSelectedIndex(ch);
+    }
+    else
+    {
+      this.currentItemIndex = ch - '0';
+    }
   }
 
   public void UnsetSelectedIndex()

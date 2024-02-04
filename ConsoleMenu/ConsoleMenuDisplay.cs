@@ -104,7 +104,7 @@ readKey:
         {
           this.menuItems.SelectPreviousVisibleItem(this.visibility);
         }
-        else if (this.menuItems.CanSelect(key.KeyChar))
+        else if (!this.config.DisableKeyboardNavigation && this.menuItems.CanSelect(key.KeyChar))
         {
           this.menuItems.Select(key.KeyChar);
           breakIteration = true;
