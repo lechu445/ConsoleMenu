@@ -34,7 +34,7 @@ internal sealed class ConsoleMenuDisplay
 
   public async Task ShowAsync(CancellationToken token)
   {
-    var selectedItem = this.menuItems.GetSeletedItem();
+    var selectedItem = this.menuItems.GetSelectedItem();
     if (selectedItem != null)
     {
       await selectedItem.AsyncAction.Invoke(token);
@@ -104,7 +104,7 @@ readKey:
         {
           this.menuItems.SelectPreviousVisibleItem(this.visibility);
         }
-        else if (this.menuItems.CanSelect(key.KeyChar))
+        else if (!this.config.DisableKeyboardNavigation && this.menuItems.CanSelect(key.KeyChar))
         {
           this.menuItems.Select(key.KeyChar);
           breakIteration = true;

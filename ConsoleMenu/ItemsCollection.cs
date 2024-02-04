@@ -30,6 +30,8 @@ internal sealed class ItemsCollection
     set => this.menuItems[this.currentItemIndex] = value;
   }
 
+  public bool EnableAlphabet { get; set; } = false;
+
   public void Add(string name, Func<CancellationToken, Task> action)
   {
     this.menuItems.Add(new MenuItem(name, action, this.menuItems.Count));
@@ -46,7 +48,7 @@ internal sealed class ItemsCollection
     this.SetSelectedItems(level, this.config.ArgsPreselectedItemsKey, ref arg);
   }
 
-  public MenuItem? GetSeletedItem()
+  public MenuItem? GetSelectedItem()
   {
     if (this.selectedIndex < this.menuItems.Count)
     {
@@ -78,12 +80,24 @@ internal sealed class ItemsCollection
 
   public bool CanSelect(char ch)
   {
-    return ch >= '0' && (ch - '0') < this.menuItems.Count; // is in range 0.._menuItems.Count
+    if (this.EnableAlphabet)
+    {
+      return ch >= '0' && GetSelectedIndex(ch) < this.menuItems.Count;
+    }
+
+    return ch >= '0' && (ch - '0') < this.menuItems.Count;
   }
 
   public void Select(char ch)
   {
-    this.currentItemIndex = ch - '0';
+    if (this.EnableAlphabet)
+    {
+      this.currentItemIndex = GetSelectedIndex(ch);
+    }
+    else
+    {
+      this.currentItemIndex = ch - '0';
+    }
   }
 
   public void UnsetSelectedIndex()
@@ -95,6 +109,18 @@ internal sealed class ItemsCollection
   internal bool IsSelected(MenuItem menuItem)
   {
     return this.currentItemIndex == menuItem.Index;
+  }
+
+  private static int GetSelectedIndex(char ch)
+  {
+    int index = ch switch
+    {
+      >= 'a' and <= 'z' => ch - 'a' + 10,
+      >= 'A' and <= 'Z' => ch - 'A' + 10,
+      _ => ch - '0',
+    };
+
+    return index;
   }
 
   private void SetSelectedItems(int level, string paramKey, ref string? arg)

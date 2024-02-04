@@ -14,9 +14,21 @@ public class MenuConfig
   /// </summary>
   public MenuConfig()
   {
+    this.WriteItemAction = item =>
+    {
+      if (this.EnableAlphabet)
+      {
+        AlphabetItemAction(item);
+      }
+      else
+      {
+        DefaultItemAction(item);
+      }
+    };
   }
 
   internal MenuConfig(MenuConfig config)
+    : this()
   {
     this.ArgsPreselectedItemsKey = config.ArgsPreselectedItemsKey;
     this.ArgsPreselectedItemsValueSeparator = config.ArgsPreselectedItemsValueSeparator;
@@ -35,6 +47,8 @@ public class MenuConfig
     this.WriteHeaderAction = config.WriteHeaderAction;
     this.WriteItemAction = config.WriteItemAction;
     this.WriteTitleAction = config.WriteTitleAction;
+    this.EnableAlphabet = config.EnableAlphabet;
+    this.DisableKeyboardNavigation = config.DisableKeyboardNavigation;
   }
 
   /// <summary>default: Console.ForegroundColor</summary>
@@ -53,7 +67,7 @@ public class MenuConfig
   public Action WriteHeaderAction = () => Console.WriteLine("Pick an option:");
 
   /// <summary>default: (item) => Console.Write("[{0}] {1}", item.Index, item.Name)</summary>
-  public Action<MenuItem> WriteItemAction = item => Console.Write("[{0}] {1}", item.Index, item.Name);
+  public Action<MenuItem> WriteItemAction;
 
   /// <summary>default: ">> "</summary>
   public string Selector = ">> ";
@@ -87,4 +101,44 @@ public class MenuConfig
 
   /// <summary>default: titles => Console.WriteLine(string.Join(" > ", titles))</summary>
   public Action<IReadOnlyList<string>> WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" > ", titles));
+
+  /// <summary>
+  /// Uses A..Z for the menu index to enable keyboard navigation for up to 36 menu items.
+  /// If you have more than 36 menu items, it will switch back to using numbers for item 37 forward.
+  /// default: false
+  /// </summary>
+  public bool EnableAlphabet = false;
+
+  /// <summary>Disables keyboard navigation, forcing the use of the up and down arrows. default: false</summary>
+  public bool DisableKeyboardNavigation = false;
+
+  private static void DefaultItemAction(MenuItem item)
+  {
+    Console.Write("[{0}] {1}", item.Index, item.Name);
+  }
+
+  private static void AlphabetItemAction(MenuItem item)
+  {
+    char index;
+
+    switch (item.Index)
+    {
+      case >= 36:
+        // use item.Index (i.e. 37, 38, 39)
+        Console.Write("[{0}] {1}", item.Index, item.Name);
+        break;
+
+      case >= 10:
+        // use A..Z
+        index = (char)(item.Index + 'A' - 10);
+        Console.Write("[{0}] {1}", index, item.Name);
+        break;
+
+      default:
+        // use 0..9
+        index = (char)(item.Index + '0');
+        Console.Write("[{0}] {1}", index, item.Name);
+        break;
+    }
+  }
 }

@@ -19,6 +19,8 @@ ConsoleTools.MenuConfig
 ConsoleTools.MenuConfig.ArgsPreselectedItemsKey -> string!
 ConsoleTools.MenuConfig.ArgsPreselectedItemsValueSeparator -> char
 ConsoleTools.MenuConfig.ClearConsole -> bool
+ConsoleTools.MenuConfig.DisableKeyboardNavigation -> bool
+ConsoleTools.MenuConfig.EnableAlphabet -> bool
 ConsoleTools.MenuConfig.EnableBreadcrumb -> bool
 ConsoleTools.MenuConfig.EnableFilter -> bool
 ConsoleTools.MenuConfig.EnableWriteTitle -> bool
