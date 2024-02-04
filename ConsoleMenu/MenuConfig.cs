@@ -59,11 +59,11 @@ public class MenuConfig
 
     if (item.Index >= 10)
     {
-      index = (char)(item.Index + 55);
+      index = (char)(item.Index + 'A' - 10);
     }
     else
     {
-      index = (char)(item.Index + 48);
+      index = (char)(item.Index + '0');
     }
 
     Console.Write("[{0}] {1}", index, item.Name);

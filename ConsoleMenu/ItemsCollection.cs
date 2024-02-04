@@ -46,7 +46,7 @@ internal sealed class ItemsCollection
     this.SetSelectedItems(level, this.config.ArgsPreselectedItemsKey, ref arg);
   }
 
-  public MenuItem? GetSeletedItem()
+  public MenuItem? GetSelectedItem()
   {
     if (this.selectedIndex < this.menuItems.Count)
     {
@@ -78,13 +78,11 @@ internal sealed class ItemsCollection
 
   public bool CanSelect(char ch)
   {
-    // return ch >= '0' && (ch - '0') < this.menuItems.Count; // is in range 0.._menuItems.Count
     return ch >= '0' && GetSelectedIndex(ch) < this.menuItems.Count;
   }
 
   public void Select(char ch)
   {
-    // this.currentItemIndex = ch - '0';
     this.currentItemIndex = GetSelectedIndex(ch);
   }
 
@@ -103,8 +101,8 @@ internal sealed class ItemsCollection
   {
     int index = ch switch
     {
-      >= 'a' and <= 'z' => ch - 87,
-      >= 'A' and <= 'Z' => ch - 56,
+      >= 'a' and <= 'z' => ch - 'a' + 10,
+      >= 'A' and <= 'Z' => ch - 'A' + 10,
       _ => ch - '0',
     };
 
