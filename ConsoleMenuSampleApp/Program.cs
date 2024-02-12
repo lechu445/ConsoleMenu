@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ConsoleTools;
@@ -15,6 +16,7 @@ namespace ConsoleMenuSampleApp
         EnableFilter = true,
         EnableBreadcrumb = true,
         WriteBreadcrumbAction = titles => Console.WriteLine(string.Join(" / ", titles)),
+        OutputEncoding = Encoding.Unicode,
       };
 
       var subMenu1 = new ConsoleMenu(args, level: 2)
@@ -46,7 +48,7 @@ namespace ConsoleMenuSampleApp
         .Add("One", () => SomeAction("One"))
         .Add("Two", () => SomeAction("Two"))
         .Add("Three", () => SomeAction("Three"))
-        .Add("Sub", subMenu.Show)
+        .Add("Sub \u00BB", subMenu.Show)
         .Add("Change me!", (thisMenu) => thisMenu.CurrentItem.Name = "I am changed!")
         .Add("Close", ConsoleMenu.Close)
         .Add("Action then Close", (thisMenu) => { SomeAction("Closing action..."); thisMenu.CloseMenu(); })

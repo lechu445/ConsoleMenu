@@ -28,7 +28,7 @@ internal sealed class SystemConsole : IConsole
 
   public ConsoleColor ForegroundColor { get => Console.ForegroundColor; set => Console.ForegroundColor = value; }
 
-  public Encoding InputEncoding { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+  public Encoding InputEncoding { get => Console.InputEncoding; set => Console.InputEncoding = value; }
 
   public bool IsErrorRedirected => throw new NotImplementedException();
 
@@ -48,7 +48,7 @@ internal sealed class SystemConsole : IConsole
 
   public TextWriter Out => throw new NotImplementedException();
 
-  public Encoding OutputEncoding { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+  public Encoding OutputEncoding { get => Console.OutputEncoding; set => Console.OutputEncoding = value; }
 
   public string Title { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
