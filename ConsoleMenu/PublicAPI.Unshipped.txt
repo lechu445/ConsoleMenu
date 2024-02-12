@@ -23,9 +23,11 @@ ConsoleTools.MenuConfig.EnableBreadcrumb -> bool
 ConsoleTools.MenuConfig.EnableFilter -> bool
 ConsoleTools.MenuConfig.EnableWriteTitle -> bool
 ConsoleTools.MenuConfig.FilterPrompt -> string!
+ConsoleTools.MenuConfig.InputEncoding -> System.Text.Encoding!
 ConsoleTools.MenuConfig.ItemBackgroundColor -> System.ConsoleColor
 ConsoleTools.MenuConfig.ItemForegroundColor -> System.ConsoleColor
 ConsoleTools.MenuConfig.MenuConfig() -> void
+ConsoleTools.MenuConfig.OutputEncoding -> System.Text.Encoding!
 ConsoleTools.MenuConfig.SelectedItemBackgroundColor -> System.ConsoleColor
 ConsoleTools.MenuConfig.SelectedItemForegroundColor -> System.ConsoleColor
 ConsoleTools.MenuConfig.Selector -> string!

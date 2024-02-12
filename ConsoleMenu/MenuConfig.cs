@@ -1,6 +1,7 @@
 ﻿#pragma warning disable SA1401 // Fields should be private
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ConsoleTools;
 
@@ -25,8 +26,10 @@ public class MenuConfig
     this.EnableFilter = config.EnableFilter;
     this.EnableWriteTitle = config.EnableWriteTitle;
     this.FilterPrompt = config.FilterPrompt;
+    this.InputEncoding = config.InputEncoding;
     this.ItemBackgroundColor = config.ItemBackgroundColor;
     this.ItemForegroundColor = config.ItemForegroundColor;
+    this.OutputEncoding = config.OutputEncoding;
     this.SelectedItemBackgroundColor = config.SelectedItemBackgroundColor;
     this.SelectedItemForegroundColor = config.SelectedItemForegroundColor;
     this.Selector = config.Selector;
@@ -48,6 +51,12 @@ public class MenuConfig
 
   /// <summary>default: Console.ForegroundColor</summary>
   public ConsoleColor ItemForegroundColor = Console.ForegroundColor;
+
+  /// <summary>default: Console.OutputEncoding</summary>
+  public Encoding InputEncoding = Console.InputEncoding;
+
+  /// <summary>default: Console.OutputEncoding</summary>
+  public Encoding OutputEncoding = Console.OutputEncoding;
 
   /// <summary>default: () => Console.WriteLine("Pick an option:")</summary>
   public Action WriteHeaderAction = () => Console.WriteLine("Pick an option:");
