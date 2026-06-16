@@ -1,4 +1,8 @@
 # ConsoleMenu
+
+![Tests](https://github.com/lechu445/ConsoleMenu/actions/workflows/mcp-dotnet-tests.yml/badge.svg)
+![NuGet](https://img.shields.io/nuget/v/ConsoleMenu-simple.svg)
+
 A simple, highly customizable, DOS-like console menu
 
 ![img](https://raw.githubusercontent.com/lechu445/ConsoleMenu/master/preview.gif)

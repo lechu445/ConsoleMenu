@@ -1,0 +1,37 @@
+name: .NET Tests (MCP)
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  test-windows:
+    name: Run tests on Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Restore
+        run: dotnet restore ConsoleMenu.sln
+
+      - name: Build
+        run: dotnet build ConsoleMenu.sln --configuration Release --no-restore
+
+      - name: Run tests
+        run: |
+          dotnet test ConsoleMenuTests/ConsoleMenuTests.csproj --configuration Release --no-build --logger "trx;LogFileName=ConsoleMenuTests/TestResults.trx"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: ConsoleMenuTests/TestResults.trx

@@ -1,0 +1,43 @@
+name: Dependency scan (MCP)
+
+on:
+  push:
+    branches: ["main", "master"]
+  schedule:
+    - cron: '0 3 * * 1' # weekly on Monday at 03:00 UTC
+
+jobs:
+  vuln-scan:
+    runs-on: ubuntu-latest
+    name: Run dotnet vulnerable package scan
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Restore
+        run: dotnet restore ConsoleMenu.sln
+
+      - name: Run vulnerability scan
+        run: |
+          set -e
+          dotnet list package --vulnerable > vuln.txt || true
+          echo "--- Vulnerability scan output ---"
+          cat vuln.txt
+          if grep -q "No vulnerable packages were found." vuln.txt; then
+            echo "No vulnerable packages found."
+          else
+            echo "Vulnerable packages found. Failing job."
+            exit 1
+          fi
+
+      - name: Upload scan output
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-scan-output
+          path: vuln.txt

@@ -1,0 +1,42 @@
+name: Sample app smoke test (MCP)
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  smoke-windows:
+    name: Run ConsoleMenu sample app (smoke)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Build sample and library
+        run: dotnet build ConsoleMenu.sln --configuration Release
+
+      - name: Run sample app (preselected item)
+        shell: pwsh
+        run: |
+          $out = "sample-output.txt"
+          dotnet run --project ConsoleMenuSampleApp\ConsoleMenuSampleApp.csproj --configuration Release --no-build -- --menu-select="""0""" > $out
+          Write-Host "--- Sample output ---"
+          Get-Content $out | ForEach-Object { Write-Host $_ }
+          if (-not (Select-String -Path $out -Pattern "Pick an option" -Quiet)) {
+            Write-Error "Expected text 'Pick an option' not found in sample output."
+            exit 1
+          }
+
+      - name: Upload sample output
+        uses: actions/upload-artifact@v4
+        with:
+          name: sample-app-output
+          path: sample-output.txt
