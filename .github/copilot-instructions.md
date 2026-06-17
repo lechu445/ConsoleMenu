@@ -51,7 +51,6 @@ Notes for Copilot sessions
 MCP servers
 - Configured: .github/workflows/mcp-dotnet-tests.yml — a GitHub Actions workflow that runs on windows-latest for push and pull_request. It restores, builds the solution, runs the ConsoleMenuTests project with a TRX logger, and uploads the TestResults.trx as an artifact. Use this workflow as the MCP .NET test runner for CI validations.
 - Configured: .github/workflows/mcp-dependency-scan.yml — weekly and on push; runs dotnet list package --vulnerable and fails the job when vulnerable packages are detected. The scan output is uploaded as an artifact (dependency-scan-output).
-- Configured: .github/workflows/mcp-sample-app-smoke.yml — runs on Windows for push and PRs; builds the solution, runs the ConsoleMenuSampleApp with a preselected menu argument, asserts the app produced expected text ("Pick an option"), and uploads sample output as an artifact.
 - Run tests locally to match the server: dotnet test ConsoleMenuTests/ConsoleMenuTests.csproj --logger "trx;LogFileName=ConsoleMenuTests/TestResults.trx"
 
 
