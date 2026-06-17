@@ -29,11 +29,11 @@ jobs:
           dotnet list package --vulnerable > vuln.txt || true
           echo "--- Vulnerability scan output ---"
           cat vuln.txt
-          if grep -q "No vulnerable packages were found." vuln.txt; then
-            echo "No vulnerable packages found."
-          else
+          if grep -q "has the following vulnerable packages" vuln.txt; then
             echo "Vulnerable packages found. Failing job."
             exit 1
+          else
+            echo "No vulnerable packages found."
           fi
 
       - name: Upload scan output
