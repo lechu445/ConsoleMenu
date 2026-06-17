@@ -2,10 +2,10 @@ Purpose
 Provide concise, actionable guidance for Copilot/code-agent sessions working in this repository (ConsoleMenu).
 
 Build, test & lint (commands)
-- Build solution: dotnet build ConsoleMenu.sln
+- Build solution: dotnet build ConsoleMenu.slnx
 - Build single project: dotnet build ConsoleMenu\ConsoleMenu.csproj
 - Run the sample app (pass menu args after --): dotnet run --project ConsoleMenuSampleApp\ConsoleMenuSampleApp.csproj -- --menu-select="Sub.2"
-- Run all tests: dotnet test ConsoleMenu.sln
+- Run all tests: dotnet test ConsoleMenu.slnx
 - Run a single test (by method/class):
   dotnet test ConsoleMenuTests\ConsoleMenuTests.csproj --filter "FullyQualifiedName~ConsoleMenuTests.SimpleScenarioTest.SimpleScenario"
   (use a substring match with FullyQualifiedName to target class/method)

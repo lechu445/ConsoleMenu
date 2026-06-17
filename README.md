@@ -93,4 +93,4 @@ Example:
         .Show();
 ```
 ## Requirements
-Framework compatible with .NET Standard 1.3 (.NET Core 1.0, .NET Framework 4.6, Mono 4.6) or higher.
+Framework compatible with .NET Standard 2.0 (.NET Core 2.0, .NET Framework 4.6.1, Mono 5.4) or higher.

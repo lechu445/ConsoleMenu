@@ -21,7 +21,7 @@ jobs:
           dotnet-version: '6.0.x'
 
       - name: Restore
-        run: dotnet restore ConsoleMenu.sln
+        run: dotnet restore ConsoleMenu.slnx
 
       - name: Run vulnerability scan
         run: |

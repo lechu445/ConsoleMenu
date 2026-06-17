@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -19,7 +19,7 @@ namespace ConsoleMenuTests
         RedirectStandardError = true,
         UseShellExecute = false,
         CreateNoWindow = true,
-        WorkingDirectory = Path.GetFullPath("..\")
+        WorkingDirectory = Path.GetFullPath("..\\")
       };
 
       using var proc = Process.Start(start);

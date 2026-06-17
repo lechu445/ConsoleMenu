@@ -21,10 +21,10 @@ jobs:
           dotnet-version: '6.0.x'
 
       - name: Restore
-        run: dotnet restore ConsoleMenu.sln
+        run: dotnet restore ConsoleMenu.slnx
 
       - name: Build
-        run: dotnet build ConsoleMenu.sln --configuration Release --no-restore
+        run: dotnet build ConsoleMenu.slnx --configuration Release --no-restore
 
       - name: Run tests
         run: |

@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="preview.gif" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="ConsoleMenu/ConsoleMenu.csproj" />
+  <Project Path="ConsoleMenuSampleApp/ConsoleMenuSampleApp.csproj" />
+  <Project Path="ConsoleMenuTests/ConsoleMenuTests.csproj" />
+</Solution>
